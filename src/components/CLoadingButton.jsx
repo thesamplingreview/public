@@ -1,4 +1,4 @@
-import Button from '@mui/material/Button';
+import CButton from '@/components/CButton.jsx';
 import CLoader from '@/components/CLoader.jsx';
 
 export default function CLoadingButton({
@@ -7,12 +7,12 @@ export default function CLoadingButton({
   ...props
 }) {
   return (
-    <Button
+    <CButton
       {...props}
       startIcon={loading ? <CLoader p={0} size="1em" /> : props.startIcon}
       disabled={loading || props.disabled}
     >
       {children}
-    </Button>
+    </CButton>
   );
 }

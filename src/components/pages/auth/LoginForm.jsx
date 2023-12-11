@@ -51,14 +51,14 @@ export default function LoginForm() {
         <CInput
           type="email"
           name="email"
-          label="Login Email"
+          placeholder="Login Email"
           required
         />
       </Box>
       <Box mt={2}>
         <CInputPassword
           name="password"
-          label="Password"
+          placeholder="Password"
           required
         />
       </Box>
@@ -68,6 +68,7 @@ export default function LoginForm() {
           variant="contained"
           color="primary"
           fullWidth
+          rounded
           disabled={!isValidated}
           loading={loading}
         >

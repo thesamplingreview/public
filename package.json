@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:icon": "svg-sprite-generate -d src/assets/icons -o public/sprite.svg"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -16,6 +17,7 @@
     "@mui/material": "^5.14.20",
     "axios": "^1.6.2",
     "date-fns": "^2.30.0",
+    "ejs": "^3.1.9",
     "js-cookie": "^3.0.5",
     "next": "14.0.3",
     "qs": "^6.11.2",
@@ -26,6 +28,7 @@
     "eslint": "^8",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-next": "14.0.3",
-    "eslint-import-resolver-alias": "^1.1.2"
+    "eslint-import-resolver-alias": "^1.1.2",
+    "svg-sprite-generator": "^0.0.7"
   }
 }

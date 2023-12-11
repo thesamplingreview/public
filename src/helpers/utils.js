@@ -128,7 +128,7 @@ export function toFormData(input, formData = null, parentKey = '') {
     }
 
     /* eslint-disable brace-style */
-    // File support
+    // File support (window only)
     if (value instanceof File || value instanceof Blob) {
       formData.append(propName, value);
     }

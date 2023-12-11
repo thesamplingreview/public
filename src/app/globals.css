@@ -8,9 +8,9 @@
   --bg-500: #edefff;
   --bg-700: #dddddd;
   --border-500: #dee2e6;
-  --main-300: #9590d7;
-  --main-500: #716aca;
-  --main-700: #4d44bd;
+  --main-300: #FFA85E;
+  --main-500: #FB8F34;
+  --main-700: #B96015;
   --shadow-500: 0 1px 15px rgba(69,65,78,.1);
 }
 *,
@@ -48,6 +48,25 @@ body{
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+/**
+ * Utils
+ */
+.link{
+  color: var(--color-500);
+  transition: color .3s;
+}
+.link-main{
+  color: var(--main-500);
+  transition: color .3s;
+}
+.link:hover,
+.link-main:hover{
+  color: var(--main-700);
+}
+.no-line{
+  text-decoration: none;
 }
 
 /**

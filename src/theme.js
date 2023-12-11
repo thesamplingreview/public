@@ -4,10 +4,11 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#716aca',
+      main: '#FB8F34',
+      contrastText: '#fff',
     },
     secondary: {
-      main: '#97a4ba',
+      main: '#60e4e4',
     },
     success: {
       main: '#2ea782',
@@ -66,13 +67,35 @@ const theme = createTheme({
     },
     body1: {
       fontSize: '1rem',
+      fontWeight: 300,
     },
     body2: {
       fontSize: '0.875rem',
+      fontWeight: 300,
     },
     label: {
       fontSize: '1rem',
       fontWeight: 500,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontWeight: 500,
+          padding: '.65em 1.5em',
+          fontSize: '1em',
+          textTransform: 'none',
+          boxShadow: 'none',
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: '8px',
+        },
+      },
     },
   },
 });

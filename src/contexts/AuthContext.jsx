@@ -77,7 +77,6 @@ export const AuthProvider = ({
 
   useOnce(() => {
     if (initData.retryToken) {
-      console.log('force set')
       setTokenHook(initData.retryToken);
     }
     setValidated(true);

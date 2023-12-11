@@ -4,15 +4,12 @@ import Footer from '@/components/layouts/Footer.jsx';
 
 export default function Layout({ children }) {
   return (
-    <>
+    <Box display="flex" flexDirection="column" minHeight="100vh">
       <Header />
-      <Box
-        component="main"
-        minHeight="calc(100vh - 3.75rem)"
-      >
+      <Box component="main" flexGrow="1">
         {children}
       </Box>
       <Footer />
-    </>
+    </Box>
   );
 }
