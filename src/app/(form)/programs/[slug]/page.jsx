@@ -1,10 +1,7 @@
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { useServerFetch } from '@/hooks/auth-server';
-import CampaignDetail from '@/components/pages/campaign/CampaignDetail.jsx';
+import CampaignForm from '@/components/pages/programs/CampaignForm';
 
 // manually cache for re-using purpose, as next memorize fetch not working
 const fetchDetail = cache(async (slug) => {
@@ -39,19 +36,11 @@ async function useServerData(slug) {
   return data;
 }
 
-export default async function CampaignPage({ params }) {
+export default async function Program({ params }) {
   const result = await useServerData(params.slug);
   if (!result) {
     notFound();
   }
 
-  return (
-    <Box>
-      <Container maxWidth="xl">
-        <Typography variant="h1">{params.slug}</Typography>
-
-        <CampaignDetail data={result} />
-      </Container>
-    </Box>
-  );
+  return <CampaignForm data={result} />;
 }

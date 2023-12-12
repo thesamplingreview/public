@@ -88,6 +88,9 @@ const theme = createTheme({
           textTransform: 'none',
           boxShadow: 'none',
         },
+        sizeSmall: {
+          fontSize: '.875em',
+        },
       },
     },
     MuiAlert: {

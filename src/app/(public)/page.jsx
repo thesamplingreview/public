@@ -1,9 +1,6 @@
-// import { cookies } from 'next/headers';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { useServerFetch } from '@/hooks/auth-server';
-import CampaignList from '@/components/pages/home/CampaignList.jsx';
+import SecHero from '@/components/pages/home/SecHero.jsx';
+import SecCampaigns from '@/components/pages/home/SecCampaigns.jsx';
 
 // this not working as expected (hence using force load pattern)
 // export const dynamic = 'force-dynamic';
@@ -20,12 +17,9 @@ export default async function Home() {
   const result = await useServerData();
 
   return (
-    <Box>
-      <Container maxWidth="xl">
-        <Typography variant="h1">Home page</Typography>
-
-        <CampaignList dataset={result.data} meta={result.meta} />
-      </Container>
-    </Box>
+    <>
+      <SecHero />
+      <SecCampaigns dataset={result.data} meta={result.meta} />
+    </>
   );
 }

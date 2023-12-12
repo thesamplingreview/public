@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useUpdated } from '@/helpers/hooks';
+import { useUpdated } from '@/hooks/ui';
 import CInput from './CInput.jsx';
 import CSelect from './CSelect.jsx';
 
@@ -52,7 +52,7 @@ export default function CInputPhone({
   }, [valueFull]);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
       {name && (
         <input
           type="hidden"
@@ -65,7 +65,7 @@ export default function CInputPhone({
           value={valuePrefix}
           options={prefixes}
           renderValue={(val) => val}
-          sx={{ width: 100 }}
+          sx={{ width: 90 }}
           onChange={handleChangePrefix}
         />
       </Grid>

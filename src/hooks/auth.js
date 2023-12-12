@@ -92,3 +92,43 @@ export function useLogout() {
 
   return doLogout;
 }
+
+/**
+ * Perform signup
+ *
+ * @return Void
+ */
+export function useSignup() {
+  const doLogin = useLogin();
+
+  const doSignup = useCallback(async (input) => {
+    try {
+      const { data } = await request({
+        url: '/v1/auth/signup',
+        method: 'POST',
+        data: input,
+      });
+      if (data.code !== 200) {
+        throw new Error('Unable to signup.');
+      }
+
+      // auto-login
+      const user = await doLogin({
+        email: input.email,
+        password: input.password,
+      });
+
+      return user;
+    } catch (err) {
+      const errCode = err.response?.data?.code || 500;
+      if (!err.response || errCode === 500) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        throw new Error('Something went wrong, please contact support');
+      }
+      throw new Error('Invalid authentication!');
+    }
+  }, [doLogin]);
+
+  return doSignup;
+}

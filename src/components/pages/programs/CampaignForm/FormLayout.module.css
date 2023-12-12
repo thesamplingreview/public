@@ -1,0 +1,44 @@
+.fadeRight-enter,
+.fadeRight-exit,
+.fadeLeft-enter,
+.fadeLeft-exit{
+  transition-property: opacity, transform;
+  transition-timing-function: ease-out;
+  transition-duration: .5s;
+}
+
+/* fade-right */
+.fadeRight-enter {
+  opacity: 0;
+  transform: translateX(10rem);
+}
+.fadeRight-enterActive {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fadeRight-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fadeRight-exitActive {
+  opacity: 0;
+  transform: translateX(-10rem);
+}
+
+/* fade-left */
+.fadeLeft-enter {
+  opacity: 0;
+  transform: translateX(-10rem);
+}
+.fadeLeft-enterActive {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fadeLeft-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fadeLeft-exitActive {
+  opacity: 0;
+  transform: translateX(10rem);
+}

@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { useValidated, useAuth } from '@/hooks/auth';
 import CLoader from '@/components/CLoader.jsx';
 import Header from '@/components/layouts/Header.jsx';
+import IconPreloader from '@/components/layouts/IconPreloader.jsx';
 
 export default function Layout({ children }) {
   const [auth] = useAuth();
@@ -28,6 +29,7 @@ export default function Layout({ children }) {
       >
         {children}
       </Box>
+      <IconPreloader />
     </>
   );
 }

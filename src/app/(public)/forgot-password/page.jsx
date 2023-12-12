@@ -20,7 +20,7 @@ export default function ForgotPassword() {
             Forgot Password?
           </Typography>
           <Typography variant="body1" color="text.light" mb={4}>
-            Don&lsquo;t worry, we will assists you reset your password.
+            Don&lsquo;t worry, we will assists you reset your account password.
           </Typography>
 
           <ForgotForm />

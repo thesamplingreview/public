@@ -1,27 +1,40 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-import { useValidated, useLogin } from '@/hooks/auth';
+import { useValidated, useSignup } from '@/hooks/auth';
 import CInput from '@/components/CInput.jsx';
+import CInputPhone from '@/components/CInputPhone.jsx';
 import CInputPassword from '@/components/CInputPassword.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
 
 function genDefaultInput() {
   return {
     email: '',
+    name: '',
     password: '',
+    contact: '',
   };
 }
 
-export default function LoginForm({ onComplete, ...props }) {
+export default function SignupForm({ onComplete, ...props }) {
   const isValidated = useValidated();
-  const doLogin = useLogin();
+  const doSignup = useSignup();
 
   const [input, setInput] = useState(genDefaultInput());
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
+
+  const isSubmitable = useMemo(() => {
+    const {
+      name, email, password, contact,
+    } = input;
+
+    return (
+      name && email && password && contact
+    );
+  }, [input]);
 
   const handleChange = useCallback((e) => {
     setInput((state) => ({
@@ -33,16 +46,25 @@ export default function LoginForm({ onComplete, ...props }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // validation
+    if (!isSubmitable) {
+      setAlert({
+        type: 'error',
+        message: 'Incomplete data',
+      });
+      return;
+    }
+
     setAlert(null);
     setLoading(true);
     try {
-      const result = await doLogin(input);
+      const result = await doSignup(input);
       // callback
       onComplete(result);
     } catch (err) {
       setAlert({
         type: 'error',
-        message: 'Invalid credential.',
+        message: 'Failed to signup.',
       });
     }
     setLoading(false);
@@ -64,6 +86,14 @@ export default function LoginForm({ onComplete, ...props }) {
       )}
       <Box>
         <CInput
+          name="name"
+          placeholder="Your Name"
+          required
+          onChange={handleChange}
+        />
+      </Box>
+      <Box mt={2}>
+        <CInput
           type="email"
           name="email"
           placeholder="Login Email"
@@ -79,6 +109,18 @@ export default function LoginForm({ onComplete, ...props }) {
           onChange={handleChange}
         />
       </Box>
+      <Box mt={2}>
+        <CInputPhone
+          name="contact"
+          placeholder="Contact Number"
+          prefixes={[
+            { id: '+60', name: 'aaa' },
+            { id: '+61', name: 'aaa' },
+          ]}
+          required
+          onChange={handleChange}
+        />
+      </Box>
       <Box mt={3} mb={3}>
         <CLoadingButton
           type="submit"
@@ -89,7 +131,7 @@ export default function LoginForm({ onComplete, ...props }) {
           disabled={!isValidated}
           loading={loading}
         >
-          Login
+          Sign Up
         </CLoadingButton>
       </Box>
     </Box>

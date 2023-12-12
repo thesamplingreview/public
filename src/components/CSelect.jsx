@@ -1,30 +1,38 @@
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
+import { CInputBase, CInputControl } from '@/components/CInput.jsx';
 
 export default function CSelect({
   options = [],
-  label = '',
-  required,
-  placeholder,
+  label,
   size,
+  required,
   error,
   helperText,
+  placeholder,
+  controlProps,
   ...props
 }) {
   return (
-    <FormControl
-      fullWidth
+    <CInputControl
+      {...controlProps}
+      label={label}
       size={size}
       required={required}
       error={error}
+      helperText={helperText}
     >
-      <InputLabel>{label}</InputLabel>
       <Select
-        label={label}
         {...props}
+        label={label}
+        input={<CInputBase disableUnderline />}
+        sx={{
+          '& .MuiSelect-select': {
+            py: '.875em',
+            pl: '1.5em',
+            pr: '2.5em !important',
+          },
+        }}
       >
         {placeholder && (
           <MenuItem value="">{placeholder}</MenuItem>
@@ -33,9 +41,6 @@ export default function CSelect({
           <MenuItem key={opt.id} value={opt.id}>{opt.name}</MenuItem>
         ))}
       </Select>
-      {(error || helperText) && (
-        <FormHelperText>{error || helperText}</FormHelperText>
-      )}
-    </FormControl>
+    </CInputControl>
   );
 }

@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import { useOnce } from '@/hooks/ui';
 import { useFetch } from '@/hooks/fetcher';
 
-export default function CampaignList({
+export default function SecCampaigns({
   dataset: serverDataset,
   meta: serverMeta,
 }) {
@@ -23,13 +24,15 @@ export default function CampaignList({
 
   return (
     <Box>
-      {dataset.map((item) => (
-        <Box key={item.id}>
-          <Link href={`/campaign/${item.slug}`}>
-            {item.name} ({item.enrolments ? 'true' : 'false'})
-          </Link>
-        </Box>
-      ))}
+      <Container maxWidth="xl">
+        {dataset.map((item) => (
+          <Box key={item.id}>
+            <Link href={`/programs/${item.slug}`}>
+              {item.name} ({item.enrolments ? 'true' : 'false'})
+            </Link>
+          </Box>
+        ))}
+      </Container>
     </Box>
   );
 }
