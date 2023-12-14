@@ -8,7 +8,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 export const CInputBase = styled(Input)(({ theme }) => ({
   fontSize: '1em',
   fontWeight: '500',
-  borderRadius: '4em',
+  borderRadius: '2em',
   border: '1px solid transparent',
   backgroundColor: 'rgba(0,0,0,.06)',
   transition: 'border .3s, background .3s, outline .3s',
@@ -19,7 +19,7 @@ export const CInputBase = styled(Input)(({ theme }) => ({
     borderColor: 'rgba(0,0,0,.4)',
     outline: '1px solid rgba(0,0,0,.4)',
   },
-  '& input': {
+  '& .MuiInputBase-input': {
     padding: '.875em 1.5em',
     '&::placeholder': {
       fontWeight: '300',

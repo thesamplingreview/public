@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import CButton from '@/components/CButton.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
-export default function FieldSelect({
+export default function FieldYesNo({
   field,
   name,
   value,
@@ -14,6 +14,17 @@ export default function FieldSelect({
   onPrev,
   onNext,
 }) {
+  const options = [
+    {
+      id: 'Yes',
+      name: 'Yes',
+    },
+    {
+      id: 'No',
+      name: 'No',
+    },
+  ];
+
   const isNextable = useMemo(() => {
     if (field.mandatory) {
       return Boolean(value);
@@ -32,7 +43,7 @@ export default function FieldSelect({
     <>
       <Box width="40rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
         <Stack justifyContent="center" direction="row" gap={3}>
-          {field.options.map((opt) => (
+          {options.map((opt) => (
             <CButton
               key={opt.id}
               variant="outlined"

@@ -6,6 +6,7 @@ import { useOnce } from '@/hooks/ui';
 // using cookies
 const initialState = {
   loading: true,
+  saving: false,
   data: null,
   formLayout: [],
   step: 0,
@@ -20,11 +21,12 @@ export const FormProvider = ({
 }) => {
   const [input, setInput] = useState(initialState.input);
   const [loading, setLoading] = useState(initialState.loading);
+  const [saving, setSaving] = useState(initialState.saving);
   const [step, setStep] = useState(initialState.step);
 
   const formLayout = useMemo(() => {
     return initData.form.fields.map((field) => {
-      if (field.type === 'product') {
+      if (field.type === 'products') {
         return {
           ...field,
           options: initData.products || [],
@@ -51,6 +53,7 @@ export const FormProvider = ({
   return (
     <FormContext.Provider value={{
       loading,
+      saving,
       data: initData,
       formLayout,
       step,

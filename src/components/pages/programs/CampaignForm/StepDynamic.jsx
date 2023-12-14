@@ -4,10 +4,9 @@ import { useMemo, useCallback, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useContextState, useInput } from './hooks';
-import FButton from './comps/FButton.jsx';
 import fields from './fields';
 
-export default function StepDynamic({ step, onNext }) {
+export default function StepDynamic({ step, onPrev, onNext }) {
   const formLayout = useContextState('formLayout');
   const [input, setInput] = useInput();
 
@@ -15,27 +14,31 @@ export default function StepDynamic({ step, onNext }) {
     return formLayout[step - 1];
   }, [formLayout, step]);
 
-  const isNextable = useMemo(() => {
-    if (field.mandatory) {
-      return Boolean(input[field.id]?.trim());
-    }
-    return true;
-  }, [input, field]);
-
-  const handleChange = useCallback((e) => {
-    console.log(e.target)
+  const handleChange = useCallback(({ name, value }) => {
     setInput((state) => ({
       ...state,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   }, [setInput]);
 
   return (
-    <Box textAlign="center">
+    <Box
+      display="flex"
+      alignItems="center"
+      flexDirection="column"
+      height="100%"
+      py={3}
+    >
       {/* header */}
-      <Box component="header">
+      <Box
+        textAlign="center"
+        width="40rem"
+        maxWidth="100%"
+        mb={6}
+      >
         <Typography
           variant="h1"
+          component="h2"
           fontSize="2rem"
           mb={1}
         >
@@ -55,23 +58,20 @@ export default function StepDynamic({ step, onNext }) {
       </Box>
 
       {/* body */}
-      <Box my={6}>
-        <FieldItem
-          field={field}
-          value={input[field.id] || ''}
-          onChange={handleChange}
-        />
-      </Box>
-
-      {/* action */}
-      <Box>
-        <FButton disabled={!isNextable} text="Next" onClick={onNext} />
-      </Box>
+      <FieldItem
+        field={field}
+        value={input[field.id] || ''}
+        onChange={handleChange}
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </Box>
   );
 }
 
-function FieldItem({ field, value, onChange }) {
+function FieldItem({
+  field, value, onChange, onPrev, onNext,
+}) {
   useEffect(() => {
     console.log(field);
   }, [field]);
@@ -84,6 +84,8 @@ function FieldItem({ field, value, onChange }) {
         name={`${field.id}`}
         value={value}
         onChange={onChange}
+        onPrev={onPrev}
+        onNext={onNext}
       />
     );
   }
