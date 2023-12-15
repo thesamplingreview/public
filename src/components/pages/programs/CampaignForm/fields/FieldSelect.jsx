@@ -3,7 +3,9 @@
 import { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { toStringWithData } from '@/helpers/utils';
 import CButton from '@/components/CButton.jsx';
+import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
 export default function FieldSelect({
@@ -14,17 +16,53 @@ export default function FieldSelect({
   onPrev,
   onNext,
 }) {
+  const maxCount = useMemo(() => {
+    return Number(field.config?.select_count || 1);
+  }, [field.config]);
+
+  const internalValue = useMemo(() => {
+    if (!value || !value.length) {
+      return [];
+    }
+    if (!Array.isArray(value)) {
+      return [value];
+    }
+    return value;
+  }, [value]);
+
   const isNextable = useMemo(() => {
     if (field.mandatory) {
-      return Boolean(value);
+      return maxCount > 1 ? value?.length : Boolean(value);
     }
     return true;
-  }, [field.mandatory, value]);
+  }, [field.mandatory, maxCount, value]);
+
+  const checkDisabled = (val) => {
+    if (maxCount > 1 && internalValue.length === maxCount) {
+      return !internalValue.includes(val);
+    }
+    return false;
+  };
 
   const handleSelect = (opt) => {
+    let newValue;
+
+    // different behavior for multiple & single selection
+    if (maxCount > 1) {
+      if (internalValue.includes(opt.id)) { // deselect
+        newValue = internalValue.filter((v) => v !== opt.id);
+      } else if (internalValue.length < maxCount) { // select
+        newValue = [...internalValue, opt.id];
+      } else { // unable to select
+        return;
+      }
+    } else {
+      newValue = opt.id;
+    }
+
     onChange({
       name,
-      value: opt.id,
+      value: newValue,
     });
   };
 
@@ -48,7 +86,7 @@ export default function FieldSelect({
                     {
                       transition: 'background .3s, border .3s',
                     },
-                    opt.id === value && ((theme) => ({
+                    internalValue.includes(opt.id) && ((theme) => ({
                       bgcolor: theme.palette.primary.main,
                       borderColor: theme.palette.primary.main,
                     })),
@@ -68,7 +106,7 @@ export default function FieldSelect({
                     boxShadow: '0 3px 6px rgba(0,0,0,.25)',
                   },
                 },
-                opt.id === value && ((theme) => ({
+                internalValue.includes(opt.id) && ((theme) => ({
                   color: theme.palette.primary.main,
                   borderColor: theme.palette.primary.main,
                   outline: `1px solid ${theme.palette.primary.main}`,
@@ -77,12 +115,24 @@ export default function FieldSelect({
                   },
                 })),
               ]}
+              disabled={checkDisabled(opt.id)}
               onClick={() => handleSelect(opt)}
             >
               {opt.name}
             </CButton>
           ))}
         </Stack>
+        {field.hint && (
+          <HintText
+            text={toStringWithData(field.hint, {
+              count: internalValue.length,
+              total: maxCount,
+              left: maxCount - internalValue.length,
+            })}
+            textAlign="center"
+            mt={4}
+          />
+        )}
       </Box>
       <FieldAction
         disabled={!isNextable}

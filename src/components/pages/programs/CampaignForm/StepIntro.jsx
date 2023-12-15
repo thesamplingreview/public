@@ -48,7 +48,7 @@ export default function StepIntro({ mounted, onNext }) {
         {data.description}
       </Typography>
       <Box mt={6}>
-        <FButton text="Start" onClick={onNext} />
+        <FButton text="Get Start" onClick={onNext} />
       </Box>
     </Box>
   );

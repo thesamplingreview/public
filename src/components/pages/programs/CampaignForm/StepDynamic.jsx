@@ -72,9 +72,9 @@ export default function StepDynamic({ step, onPrev, onNext }) {
 function FieldItem({
   field, value, onChange, onPrev, onNext,
 }) {
-  useEffect(() => {
-    console.log(field);
-  }, [field]);
+  // useEffect(() => {
+  //   console.log(field);
+  // }, [field]);
 
   const Comp = fields[field.type];
   if (Comp) {

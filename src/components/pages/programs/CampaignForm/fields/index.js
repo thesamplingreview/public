@@ -8,7 +8,7 @@ const fields = {
   text: FieldText,
   select: FieldSelect,
   products: FieldProduct,
-  true_false: FieldYesNo,
+  yes_no: FieldYesNo,
   address: FieldAddress,
 };
 

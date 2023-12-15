@@ -3,6 +3,7 @@
 import { useRef, useMemo, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
 export default function FieldText({
@@ -44,6 +45,7 @@ export default function FieldText({
           sx={{
             '& .MuiInputBase-input': {
               fontSize: '1.125em',
+              fontWeight: 500,
               py: 1.5,
             },
           }}
@@ -51,6 +53,9 @@ export default function FieldText({
           value={value}
           onChange={handleChange}
         />
+        {field.hint && (
+          <HintText text={field.hint} my={1} />
+        )}
       </Box>
       <FieldAction
         disabled={!isNextable}

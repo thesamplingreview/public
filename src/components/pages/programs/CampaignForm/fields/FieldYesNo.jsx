@@ -14,17 +14,6 @@ export default function FieldYesNo({
   onPrev,
   onNext,
 }) {
-  const options = [
-    {
-      id: 'Yes',
-      name: 'Yes',
-    },
-    {
-      id: 'No',
-      name: 'No',
-    },
-  ];
-
   const isNextable = useMemo(() => {
     if (field.mandatory) {
       return Boolean(value);
@@ -43,7 +32,7 @@ export default function FieldYesNo({
     <>
       <Box width="40rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
         <Stack justifyContent="center" direction="row" gap={3}>
-          {options.map((opt) => (
+          {field.options.map((opt) => (
             <CButton
               key={opt.id}
               variant="outlined"

@@ -5,7 +5,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { toStringWithData } from '@/helpers/utils';
 import { useInput } from '../hooks';
+import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
 export default function FieldProduct({
@@ -18,12 +20,26 @@ export default function FieldProduct({
 }) {
   const [input] = useInput();
 
+  const maxCount = useMemo(() => {
+    return Number(field.config?.select_count || 1);
+  }, [field.config]);
+
+  const internalValue = useMemo(() => {
+    if (!value || !value.length) {
+      return [];
+    }
+    if (!Array.isArray(value)) {
+      return [value];
+    }
+    return value;
+  }, [value]);
+
   const isNextable = useMemo(() => {
     if (field.mandatory) {
-      return Boolean(value);
+      return maxCount > 1 ? value?.length : Boolean(value);
     }
     return true;
-  }, [field.mandatory, value]);
+  }, [field.mandatory, maxCount, value]);
 
   const filteredProducts = useMemo(() => {
     return field.options.filter((product) => {
@@ -34,10 +50,10 @@ export default function FieldProduct({
 
       const getFilters = (obj) => {
         return Object.keys(obj).reduce((acc, key) => {
-          if (Array.isArray(obj[key]) && obj[key].length > 0) {
+          if (obj[key].length > 0) {
             acc.push({
               key,
-              values: obj[key],
+              values: Array.isArray(obj[key]) ? obj[key] : [obj[key]],
             });
           }
           return acc;
@@ -46,25 +62,61 @@ export default function FieldProduct({
 
       let isMatch = false;
 
-      // or conditions (match either one)
+      // or conditions
+      // - if single value, either one matched
+      // - if multiple values, either one matched
       const orFilters = getFilters(config.or || {});
-      isMatch = orFilters.some(({ key, values }) => values.includes(input[key]));
+      isMatch = orFilters.some(({ key, values }) => {
+        const checkArr = Array.isArray(input[key]) ? input[key] : [input[key]];
+        return checkArr.some((c) => values.includes(c));
+      });
       if (isMatch) {
         return true;
       }
 
-      // and conditions (must match all)
+      // and conditions
+      // - if single value, all value must matched
+      // - if multiple values, all value must match either one
       const andFilters = getFilters(config.and || {});
-      isMatch = andFilters.length === 0 ? false : andFilters.every(({ key, values }) => values.includes(input[key]));
+      // if andFilters is empty, return false instead (as and check must be forced)
+      if (andFilters.length === 0) {
+        return false;
+      }
+      isMatch = andFilters.every(({ key, values }) => {
+        const checkArr = Array.isArray(input[key]) ? input[key] : [input[key]];
+        return checkArr.some((c) => values.includes(c));
+      });
 
       return isMatch;
     });
   }, [field.options, input]);
 
+  const checkDisabled = (val) => {
+    if (maxCount > 1 && internalValue.length === maxCount) {
+      return !internalValue.includes(val);
+    }
+    return false;
+  };
+
   const handleSelect = (opt) => {
+    let newValue;
+
+    // different behavior for multiple & single selection
+    if (maxCount > 1) {
+      if (internalValue.includes(opt.id)) { // deselect
+        newValue = internalValue.filter((v) => v !== opt.id);
+      } else if (internalValue.length < maxCount) { // select
+        newValue = [...internalValue, opt.id];
+      } else { // unable to select
+        return;
+      }
+    } else {
+      newValue = opt.id;
+    }
+
     onChange({
       name,
-      value: opt.id,
+      value: newValue,
     });
   };
 
@@ -76,12 +128,24 @@ export default function FieldProduct({
             <Grid key={opt.id} xs={6} md={3}>
               <ProductItem
                 item={opt}
-                value={value}
+                selected={internalValue.includes(opt.id)}
+                disabled={checkDisabled(opt.id)}
                 onClick={handleSelect}
               />
             </Grid>
           ))}
         </Grid>
+        {field.hint && (
+          <HintText
+            text={toStringWithData(field.hint, {
+              count: internalValue.length,
+              total: maxCount,
+              left: maxCount - internalValue.length,
+            })}
+            textAlign="center"
+            mt={4}
+          />
+        )}
       </Box>
       <FieldAction
         disabled={!isNextable}
@@ -92,7 +156,12 @@ export default function FieldProduct({
   );
 }
 
-function ProductItem({ item, value, onClick }) {
+function ProductItem({
+  item,
+  selected,
+  disabled,
+  onClick,
+}) {
   const productImage = useMemo(() => {
     return item.image_url || '/images/product-placeholder.svg';
   }, [item.image_url]);
@@ -124,8 +193,11 @@ function ProductItem({ item, value, onClick }) {
             boxShadow: '0 3px 6px rgba(0,0,0,.25)',
             transform: 'translateY(-2px)',
           },
+          '&:disabled': {
+            opacity: '0.4',
+          },
         },
-        item.id === value && ((theme) => ({
+        selected && ((theme) => ({
           color: theme.palette.primary.main,
           borderColor: theme.palette.primary.main,
           outline: `1px solid ${theme.palette.primary.main}`,
@@ -134,6 +206,7 @@ function ProductItem({ item, value, onClick }) {
           },
         })),
       ]}
+      disabled={disabled}
       onClick={handleClick}
     >
       <Box

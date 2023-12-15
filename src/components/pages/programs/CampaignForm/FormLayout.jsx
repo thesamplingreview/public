@@ -10,19 +10,23 @@ import { useUpdated } from '@/hooks/ui';
 import CButton from '@/components/CButton.jsx';
 import CIcon from '@/components/CIcon.jsx';
 import CLoader from '@/components/CLoader.jsx';
-import { useContextState, useStep, useInput } from './hooks';
+import { useContextState, useStep, useSubmit } from './hooks';
 import FormProgress from './FormProgress.jsx';
 import StepIntro from './StepIntro.jsx';
 import StepDynamic from './StepDynamic.jsx';
 import StepSubmit from './StepSubmit.jsx';
+import StepCompleted from './StepCompleted.jsx';
 import styles from './FormLayout.module.css';
 
 export default function FormLayout() {
   const $item = useRef(null);
-  const loading = useContextState('loading');
-  const formLayout = useContextState('formLayout');
+  const [
+    loading, completed, formLayout,
+  ] = useContextState([
+    'loading', 'completed', 'formLayout',
+  ]);
   const [step, setStep] = useStep();
-  const [input] = useInput();
+  const doSubmit = useSubmit();
 
   const [mounted, setMounted] = useState(false);
   const [transition, setTransition] = useState('fadeRight');
@@ -52,8 +56,8 @@ export default function FormLayout() {
     }, 50);
   };
 
-  const temp = () => {
-    console.log(input);
+  const handleSubmit = () => {
+    doSubmit();
   };
 
   useUpdated(() => {
@@ -67,7 +71,7 @@ export default function FormLayout() {
 
   return (
     <Box display="flex" flexDirection="column" height="100vh">
-      <Header onBack={temp} />
+      <Header />
       <Box
         component="main"
         flexGrow="1"
@@ -82,31 +86,43 @@ export default function FormLayout() {
         {!loading && (
           <SwitchTransition mode="out-in">
             <CSSTransition
-              key={step}
+              key={`${step}_${completed}`}
               nodeRef={$item}
               timeout={500}
               classNames={{ ...transitionClassNames }}
             >
               <Box ref={$item} height="100%" mx="auto">
-                {step === 0 && (
-                  <StepIntro
+                {/* status - complete */}
+                {completed && (
+                  <StepCompleted
                     mounted={mounted}
-                    onNext={handleNext}
                   />
                 )}
-                {step > 0 && step <= formLayout.length && (
-                  <StepDynamic
-                    key={step}
-                    step={step}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                  />
-                )}
-                {step > formLayout.length && (
-                  <StepSubmit
-                    onPrev={handlePrev}
-                    onSubmit={handleNext}
-                  />
+
+                {/* form */}
+                {!completed && (
+                  <>
+                    {step === 0 && (
+                      <StepIntro
+                        mounted={mounted}
+                        onNext={handleNext}
+                      />
+                    )}
+                    {step > 0 && step <= formLayout.length && (
+                      <StepDynamic
+                        key={step}
+                        step={step}
+                        onPrev={handlePrev}
+                        onNext={handleNext}
+                      />
+                    )}
+                    {step > formLayout.length && (
+                      <StepSubmit
+                        onPrev={handlePrev}
+                        onSubmit={handleSubmit}
+                      />
+                    )}
+                  </>
                 )}
               </Box>
             </CSSTransition>
@@ -119,7 +135,7 @@ export default function FormLayout() {
   );
 }
 
-function Header({ onBack }) {
+function Header() {
   return (
     <Box
       component="header"
@@ -147,13 +163,12 @@ function Header({ onBack }) {
           }}
         >
           <CButton
-            // component={Link}
-            // href="/"
+            component={Link}
+            href="/"
             // variant="outlined"
             color="text"
             size="small"
             startIcon={<CIcon name="chevron-left" />}
-            onClick={onBack}
           >
             Back
           </CButton>

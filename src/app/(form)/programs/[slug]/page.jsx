@@ -42,5 +42,5 @@ export default async function Program({ params }) {
     notFound();
   }
 
-  return <CampaignForm data={result} />;
+  return <CampaignForm slug={params.slug} data={result} />;
 }

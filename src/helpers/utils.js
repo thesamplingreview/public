@@ -172,3 +172,16 @@ export function toFormData(input, formData = null, parentKey = '') {
   });
   return formData;
 }
+
+/**
+ * Dynamic string with data mapping
+ *
+ * @param  {string}  str
+ * @param  {object}  data
+ * @return string
+ */
+export function toStringWithData(str, data = {}) {
+  return str.replace(/%%(.*?)%%/g, (match, key) => {
+    return data[key] !== undefined ? data[key] : match;
+  });
+}
