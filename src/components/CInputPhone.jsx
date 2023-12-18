@@ -1,17 +1,25 @@
 import { useState, useMemo } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useUpdated } from '@/hooks/ui';
+import { phonePrefixes } from '@/config/options';
 import CInput from './CInput.jsx';
 import CSelect from './CSelect.jsx';
 
 export default function CInputPhone({
   value,
   name = '',
-  prefixes = [],
+  // prefixes = [],
   onChange,
   ...props
 }) {
   const [internalVal, setInternalVal] = useState(value || '');
+
+  const prefixes = useMemo(() => {
+    return phonePrefixes.map((d) => ({
+      id: d.id,
+      name: `${d.name} (${d.id})`,
+    }));
+  }, []);
 
   const valuePrefix = useMemo(() => {
     if (!prefixes.length) {

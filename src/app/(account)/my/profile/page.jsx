@@ -1,20 +1,20 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import SideNav from '@/components/pages/account/SideNav.jsx';
-import ProgramList from '@/components/pages/account/ProgramList.jsx';
+import ProfileForm from '@/components/pages/account/ProfileForm.jsx';
 
-export default function MyPassword() {
+export default function MyProfile() {
   return (
     <>
       <Typography variant="h1" mb={4}>
-        My Programs
+        Edit Profile
       </Typography>
       <Grid container spacing={5}>
         <Grid xs={12} md={9}>
-          <ProgramList />
+          <ProfileForm />
         </Grid>
         <Grid xs={12} md={3} order={{ md: -1 }}>
-          <SideNav current="campaigns" />
+          <SideNav current="profile" />
         </Grid>
       </Grid>
     </>

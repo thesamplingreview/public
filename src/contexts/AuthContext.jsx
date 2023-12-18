@@ -11,7 +11,7 @@ const initialState = {
   validated: false,
   token: Cookie.get('access_token') || '',
   refreshToken: Cookie.get('refresh_token') || '',
-  user: null, // unable to directly set, hybration will complain mis-match
+  user: null,
 };
 
 const AuthContext = createContext(initialState);
@@ -24,6 +24,7 @@ const cachedUserData = (data) => {
     id: data.id,
     email: data.email,
     name: data.name,
+    contact: data.contact,
   };
 };
 

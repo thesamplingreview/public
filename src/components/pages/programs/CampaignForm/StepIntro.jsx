@@ -7,6 +7,7 @@ import { useContextState } from './hooks';
 
 export default function StepIntro({ mounted, onNext }) {
   const data = useContextState('data');
+  console.log(data);
 
   return (
     <Box
@@ -36,17 +37,19 @@ export default function StepIntro({ mounted, onNext }) {
         fontSize="2.5rem"
         mb={1}
       >
-        {data.name}
+        {data.intro_title}
       </Typography>
-      <Typography
-        component="div"
-        variant="h5"
-        color="text.light"
-        fontWeight="300"
-        lineHeight="1.75"
-      >
-        {data.description}
-      </Typography>
+      {data.intro_description && (
+        <Typography
+          component="div"
+          variant="h5"
+          color="text.light"
+          fontWeight="300"
+          lineHeight="1.75"
+        >
+          {data.intro_description}
+        </Typography>
+      )}
       <Box mt={6}>
         <FButton text="Get Start" onClick={onNext} />
       </Box>

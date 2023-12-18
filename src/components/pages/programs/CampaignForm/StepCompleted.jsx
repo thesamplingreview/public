@@ -9,7 +9,7 @@ import CButton from '@/components/CButton.jsx';
 import { useContextState } from './hooks';
 
 export default function StepCompleted({ mounted }) {
-  const [submission] = useContextState(['submission']);
+  const [data, submission] = useContextState(['data', 'submission']);
 
   return (
     <Box
@@ -40,24 +40,26 @@ export default function StepCompleted({ mounted }) {
         fontSize="2.5rem"
         mb={1}
       >
-        Great Program Enrolled!
+        {data.postsubmit_title || 'Great Program Enrolled!'}
       </Typography>
-      <Typography
-        component="div"
-        variant="body1"
-        color="text.light"
-        fontWeight="300"
-        fontSize="1.125rem"
-        lineHeight="1.75"
-      >
-        Thank you for participate in our sampling review program. <br />bla bla bla
-      </Typography>
+      {data.postsubmit_description && (
+        <Typography
+          component="div"
+          variant="body1"
+          color="text.light"
+          fontWeight="300"
+          fontSize="1.125rem"
+          lineHeight="1.75"
+        >
+          {data.postsubmit_description}
+        </Typography>
+      )}
       <Box mt={3}>
         <Typography
           variant="body2"
           component="div"
         >
-          Enrolment ID: {submission.id}
+          Enrollment ID: {submission.id}
         </Typography>
         {submission.created_at && (
           <Typography

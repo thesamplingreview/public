@@ -8,7 +8,11 @@ import SecCampaigns from '@/components/pages/home/SecCampaigns.jsx';
 
 async function useServerData() {
   const fetcher = await useServerFetch();
-  const result = await fetcher('/v1/app/campaigns');
+  const result = await fetcher('/v1/app/campaigns', {
+    params: {
+      state: 'current',
+    },
+  });
 
   return result.data;
 }
@@ -19,7 +23,12 @@ export default async function Home() {
   return (
     <>
       <SecHero />
-      <SecCampaigns dataset={result.data} meta={result.meta} />
+      <SecCampaigns
+        initData={{
+          dataset: result.data,
+          meta: result.meta,
+        }}
+      />
     </>
   );
 }

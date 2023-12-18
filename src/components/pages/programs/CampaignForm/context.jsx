@@ -8,7 +8,20 @@ import { useFetch } from '@/hooks/fetcher';
 
 function genData(data) {
   const props = [
-    'id', 'form_id', 'name', 'slug', 'description', 'cover_url', 'products', 'form',
+    'id',
+    'form_id',
+    'name',
+    'slug',
+    'description',
+    'intro_title',
+    'intro_description',
+    'presubmit_title',
+    'presubmit_description',
+    'postsubmit_title',
+    'postsubmit_description',
+    'background_url',
+    'products',
+    'form',
   ];
   return props.reduce((acc, key) => ({
     ...acc,

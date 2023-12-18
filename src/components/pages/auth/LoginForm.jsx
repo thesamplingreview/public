@@ -38,8 +38,11 @@ export default function LoginForm({ onComplete, ...props }) {
     try {
       const result = await doLogin(input);
       // callback
-      onComplete(result);
+      if (onComplete) {
+        onComplete(result);
+      }
     } catch (err) {
+      console.log(err);
       setAlert({
         type: 'error',
         message: 'Invalid credential.',

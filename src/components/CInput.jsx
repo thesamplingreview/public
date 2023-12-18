@@ -68,7 +68,15 @@ export const CInputControl = ({
       )}
       {children}
       {(error || helperText) && (
-        <FormHelperText>{error || helperText}</FormHelperText>
+        <FormHelperText
+          sx={{
+            fontWeight: 300,
+            fontSize: '0.75rem',
+            pl: 1,
+          }}
+        >
+          {error || helperText}
+        </FormHelperText>
       )}
     </FormControl>
   );

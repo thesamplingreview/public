@@ -113,10 +113,6 @@ export default function SignupForm({ onComplete, ...props }) {
         <CInputPhone
           name="contact"
           placeholder="Contact Number"
-          prefixes={[
-            { id: '+60', name: 'aaa' },
-            { id: '+61', name: 'aaa' },
-          ]}
           required
           onChange={handleChange}
         />

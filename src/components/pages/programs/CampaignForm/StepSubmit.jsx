@@ -12,6 +12,7 @@ import { useContextState } from './hooks';
 
 export default function StepSubmit({ onPrev, onSubmit }) {
   const [data, saving, validator] = useContextState(['data', 'saving', 'validator']);
+  console.log(data)
 
   const errorMessage = useMemo(() => {
     if (!validator) {
@@ -52,17 +53,19 @@ export default function StepSubmit({ onPrev, onSubmit }) {
           fontSize="2rem"
           mb={1}
         >
-          Almost Done
+          {data.presubmit_title || 'Almost Done'}
         </Typography>
-        <Typography
-          component="div"
-          variant="body1"
-          color="text.light"
-          fontWeight="300"
-          lineHeight="1.75"
-        >
-          {data.description}
-        </Typography>
+        {data.presubmit_description && (
+          <Typography
+            component="div"
+            variant="body1"
+            color="text.light"
+            fontWeight="300"
+            lineHeight="1.75"
+          >
+            {data.presubmit_description}
+          </Typography>
+        )}
       </Box>
 
       {/* action */}

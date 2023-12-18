@@ -15,9 +15,9 @@ export default function CInputPassword({ error, ...props }) {
       endAdornment={(
         <InputAdornment position="end">
           <IconButton
-            aria-label="toggle password visibility"
-            onClick={() => setShow((state) => !state)}
             edge="end"
+            tabIndex={-1}
+            onClick={() => setShow((state) => !state)}
           >
             {show ? <IcVisibilityOff /> : <IcVisibility />}
           </IconButton>

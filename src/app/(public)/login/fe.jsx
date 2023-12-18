@@ -1,25 +1,24 @@
 'use client';
 
 import { useEffect } from 'react';
-import { redirect } from 'next/navigation';
+import { useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+// import { useOnce } from '@/hooks/ui';
 import { useAuth } from '@/hooks/auth';
 import LoginForm from '@/components/pages/auth/LoginForm.jsx';
 
 export default function LoginClient() {
+  const searchParams = useSearchParams();
   const [auth] = useAuth();
-
-  const handleComplete = () => {
-    redirect('/my');
-  };
 
   useEffect(() => {
     if (auth) {
-      redirect('/my');
+      const redirectPath = searchParams.get('redirect');
+      redirect(redirectPath || '/my');
     }
-  }, [auth]);
+  }, [auth, searchParams]);
 
   return (
     <Box maxWidth="320px" textAlign="center" mx="auto">
@@ -30,7 +29,7 @@ export default function LoginClient() {
         Welcome back. Lorem ipsuem
       </Typography>
 
-      <LoginForm onComplete={handleComplete} />
+      <LoginForm />
 
       <Box mt={3}>
         <Typography

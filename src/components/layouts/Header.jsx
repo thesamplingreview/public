@@ -36,9 +36,6 @@ export default function Header() {
             sx={{ textDecoration: 'none' }}
           >
             <Image src="/images/logo.png" alt="SamplingReview" width="60" height="60" />
-            <Typography component="span" fontWeight="500" ml={1}>
-              Sampling Review
-            </Typography>
           </Box>
         </Box>
         <Box
@@ -47,7 +44,7 @@ export default function Header() {
           display="inline-flex"
           gap={{ xs: 3, lg: 4, xl: 5 }}
         >
-          <NavItem href="/" name="Home" />
+          {/* <NavItem href="/" name="Home" /> */}
           <NavItem href="/" name="How It Works" icon="question" />
           {auth && (
             <>
