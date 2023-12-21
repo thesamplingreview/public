@@ -39,7 +39,7 @@ export default function SignupClient() {
         <Typography
           variant="body2"
           component={Link}
-          href="/signup"
+          href="/login"
           ml={1}
           className="link-main"
         >

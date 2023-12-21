@@ -5,7 +5,9 @@ import SignupClient from './fe.jsx';
 
 export default function Signup() {
   return (
-    <>
+    <Box
+      sx={{ background: 'linear-gradient(145deg, #ffffff 0%, #f6f7ff 100%)' }}
+    >
       <Container maxWidth="xl">
         <Grid container justifyContent="flex-end" minHeight="calc(100vh - 6.25rem)">
           <Grid md={6} lg={5}>
@@ -26,6 +28,6 @@ export default function Signup() {
         </Grid>
 
       </Container>
-    </>
+    </Box>
   );
 }

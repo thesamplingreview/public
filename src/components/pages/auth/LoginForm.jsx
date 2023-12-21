@@ -2,11 +2,13 @@
 
 import { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 import Alert from '@mui/material/Alert';
 import { useValidated, useLogin } from '@/hooks/auth';
 import CInput from '@/components/CInput.jsx';
 import CInputPassword from '@/components/CInputPassword.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
+import GoogleAuthBtn from './GoogleAuthBtn.jsx';
 
 function genDefaultInput() {
   return {
@@ -42,12 +44,31 @@ export default function LoginForm({ onComplete, ...props }) {
         onComplete(result);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       setAlert({
         type: 'error',
         message: 'Invalid credential.',
       });
     }
+    setLoading(false);
+  };
+
+  const handleGoogleLogin = async ({ userId, accessToken }) => {
+    setAlert(null);
+    setLoading(true);
+    // try {
+    //   const result = await doLogin(input);
+    //   // callback
+    //   if (onComplete) {
+    //     onComplete(result);
+    //   }
+    // } catch (err) {
+    //   // console.log(err);
+    //   setAlert({
+    //     type: 'error',
+    //     message: 'Invalid credential.',
+    //   });
+    // }
     setLoading(false);
   };
 
@@ -65,6 +86,31 @@ export default function LoginForm({ onComplete, ...props }) {
           {alert.message}
         </Alert>
       )}
+      <Box>
+        <GoogleAuthBtn
+          disabled={loading}
+          onAuth={handleGoogleLogin}
+        />
+      </Box>
+
+      <Grid container alignItems="center" my={3}>
+        <Grid xs>
+          <Box borderBottom="1px solid var(--border-500)" height="1px" />
+        </Grid>
+        <Grid xs="auto" px={1.5}>
+          <Box
+            fontSize="0.875rem"
+            lineHeight="1"
+            color="text.light"
+          >
+            or
+          </Box>
+        </Grid>
+        <Grid xs>
+          <Box borderBottom="1px solid var(--border-500)" height="1px" />
+        </Grid>
+      </Grid>
+
       <Box>
         <CInput
           type="email"
