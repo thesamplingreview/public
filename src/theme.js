@@ -98,6 +98,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '8px',
+          textAlign: 'left',
         },
       },
     },

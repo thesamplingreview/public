@@ -11,13 +11,13 @@ import SignupForm from '@/components/pages/auth/SignupForm.jsx';
 export default function SignupClient() {
   const [auth] = useAuth();
 
-  const handleComplete = () => {
-    redirect('/my');
-  };
-
   useEffect(() => {
     if (auth) {
-      redirect('/my');
+      if (!auth.contactVerified) {
+        redirect('/verify-phone');
+      } else {
+        redirect('/my');
+      }
     }
   }, [auth]);
 
@@ -30,9 +30,9 @@ export default function SignupClient() {
         Lorem ipsuem
       </Typography>
 
-      <SignupForm onComplete={handleComplete} />
+      <SignupForm />
 
-      <Box mt={1}>
+      <Box mt={3}>
         <Typography component="span" variant="body2">
           Already have an account?
         </Typography>

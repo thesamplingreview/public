@@ -14,7 +14,7 @@ import CLoadingButton from '@/components/CLoadingButton.jsx';
 function genInput(data) {
   return {
     name: data?.name || '',
-    contact: data?.contact || '',
+    // contact: data?.contact || '',
   };
 }
 
@@ -47,7 +47,7 @@ export default function ProfileForm() {
       setAuth({
         ...auth,
         name: data.name,
-        contact: data.contact,
+        // contact: data.contact,
       });
     } catch (err) {
       setAlert({
@@ -97,7 +97,7 @@ export default function ProfileForm() {
             helperText={(
               <Box component="span" display="flex" alignItems="center">
                 <CIcon name="question" mr={1} />
-                Login email can not be changed
+                Contact our support for changes
               </Box>
             )}
           />
@@ -116,8 +116,15 @@ export default function ProfileForm() {
             placeholder="Enter contact"
             required
             name="contact"
-            value={input.contact}
-            onChange={handleChange}
+            value={auth.contact}
+            disabled
+            // onChange={handleChange}
+            helperText={(
+              <Box component="span" display="flex" alignItems="center">
+                <CIcon name="question" mr={1} />
+                Contact our support for changes
+              </Box>
+            )}
           />
         </Grid>
       </Grid>

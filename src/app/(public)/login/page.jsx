@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
@@ -11,7 +12,29 @@ export default function Login() {
       <Container maxWidth="xl">
         <Grid container minHeight="calc(100vh - 6.25rem)">
           <Grid display={{ xs: 'none', md: 'block' }} md={6}>
-            xxx
+            <Box
+              position="relative"
+              width="580px"
+              maxWidth="100%"
+              pb="90%"
+              sx={{
+                '& img': {
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                },
+              }}
+            >
+              <Image
+                src="/images/img-login.svg"
+                alt=""
+                width="600"
+                height="600"
+              />
+            </Box>
           </Grid>
           <Grid md={6} lg={5}>
             <Box

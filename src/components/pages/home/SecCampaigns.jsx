@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { styled, darken } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useOnce, useUpdated } from '@/hooks/ui';
 import { useFetch } from '@/hooks/fetcher';
@@ -95,14 +97,26 @@ export default function SecCampaigns({ initData }) {
         </Box>
       </Container>
 
-      {loading && (
-        <Container maxWidth="sm" sx={{ mb: 6 }}>
+      <Container maxWidth="sm" sx={{ mb: 6 }}>
+        {loading && (
           <CLoader />
-        </Container>
-      )}
+        )}
 
-      {!loading && dataset.length > 0 && (
-        <Container maxWidth="sm" sx={{ mb: 6 }}>
+        {!loading && dataset.length === 0 && (
+          <Box textAlign="center" py={5} sx={{ opacity: '0.5' }}>
+            <Image
+              src="/images/img-search.svg"
+              alt="Empty"
+              width="120"
+              height="120"
+            />
+            <Typography variant="body2" fontWeight="500" mt={2}>
+              No program yet
+            </Typography>
+          </Box>
+        )}
+
+        {!loading && dataset.length > 0 && (
           <Grid container spacing={3}>
             {dataset.map((item) => (
               <Grid key={item.id} xs={12}>
@@ -110,8 +124,8 @@ export default function SecCampaigns({ initData }) {
               </Grid>
             ))}
           </Grid>
-        </Container>
-      )}
+        )}
+      </Container>
     </Box>
   );
 }

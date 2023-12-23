@@ -25,6 +25,8 @@ const cachedUserData = (data) => {
     email: data.email,
     name: data.name,
     contact: data.contact,
+    emailVerified: !!data.email_verified_at,
+    contactVerified: !!data.contact_verified_at,
   };
 };
 

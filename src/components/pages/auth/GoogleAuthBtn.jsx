@@ -7,7 +7,7 @@ import config from '@/config/app';
 import { useUpdated } from '@/hooks/ui';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
 
-export default function GoogleAuthBtn({ disabled, onAuth }) {
+export default function GoogleAuthBtn({ text, disabled, onAuth }) {
   const [token, setToken] = useState('');
   const [opening, setOpening] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,17 +37,21 @@ export default function GoogleAuthBtn({ disabled, onAuth }) {
       return;
     }
 
-    console.log(accessToken);
     setLoading(true);
     try {
       // tokeninfo API are unable to use, it need id_token instead of access_token?
       const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`);
       // const response = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${accessToken}`);
       const result = await response.json();
-      if (onAuth && result?.sub) {
+      if (!result?.sub) {
+        throw new Error('Unable to connect with Google');
+      }
+      if (onAuth) {
         onAuth({
-          userId: result.sub,
+          id: result.sub,
           accessToken: token,
+          email: result.email,
+          name: result.name || '',
         });
       }
     } catch (err) {
@@ -100,7 +104,9 @@ export default function GoogleAuthBtn({ disabled, onAuth }) {
           width="24"
           height="24"
         />
-        <Box component="span" ml={2}>Login with Google</Box>
+        <Box component="span" ml={2}>
+          {text}
+        </Box>
       </CLoadingButton>
     </>
   );

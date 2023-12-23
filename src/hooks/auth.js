@@ -29,17 +29,23 @@ export function useRefreshToken() {
 /**
  * Perform login
  *
+ * @param  {string}  provider
  * @return Void
  */
-export function useLogin() {
+export function useLogin(provider = '') {
   const [, setToken] = useToken();
   const [, setRefresh] = useRefreshToken();
   const [, setUser] = useAuth();
 
   const doLogin = useCallback(async (input) => {
     try {
+      let endpoint = '/v1/auth/login';
+      if (provider === 'google') {
+        endpoint = '/v1/auth/login/google';
+      }
+
       const { data } = await request({
-        url: '/v1/auth/login',
+        url: endpoint,
         method: 'POST',
         data: input,
       });
@@ -66,7 +72,7 @@ export function useLogin() {
       }
       throw new Error('Invalid authentication!');
     }
-  }, [setToken, setRefresh, setUser]);
+  }, [setToken, setRefresh, setUser, provider]);
 
   return doLogin;
 }
@@ -96,15 +102,21 @@ export function useLogout() {
 /**
  * Perform signup
  *
+ * @param  {string}  provider
  * @return Void
  */
-export function useSignup() {
+export function useSignup(provider = '') {
   const doLogin = useLogin();
 
   const doSignup = useCallback(async (input) => {
     try {
+      let endpoint = '/v1/auth/signup';
+      if (provider === 'google') {
+        endpoint = '/v1/auth/signup/google';
+      }
+
       const { data } = await request({
-        url: '/v1/auth/signup',
+        url: endpoint,
         method: 'POST',
         data: input,
       });
@@ -121,6 +133,10 @@ export function useSignup() {
       return user;
     } catch (err) {
       const errCode = err.response?.data?.code || 500;
+      if (errCode === 422) {
+        const errMsg = err.response.data.validator?.[0]?.msg || err.response.data.error || 'Invalid authentication';
+        throw new Error(errMsg);
+      }
       if (!err.response || errCode === 500) {
         // eslint-disable-next-line no-console
         console.log(err);
@@ -128,7 +144,7 @@ export function useSignup() {
       }
       throw new Error('Invalid authentication!');
     }
-  }, [doLogin]);
+  }, [doLogin, provider]);
 
   return doSignup;
 }

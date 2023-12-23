@@ -20,6 +20,7 @@ function genDefaultInput() {
 export default function LoginForm({ onComplete, ...props }) {
   const isValidated = useValidated();
   const doLogin = useLogin();
+  const doLoginGoogle = useLogin('google');
 
   const [input, setInput] = useState(genDefaultInput());
   const [loading, setLoading] = useState(false);
@@ -53,22 +54,24 @@ export default function LoginForm({ onComplete, ...props }) {
     setLoading(false);
   };
 
-  const handleGoogleLogin = async ({ userId, accessToken }) => {
+  const handleGoogleLogin = async ({ email, accessToken }) => {
     setAlert(null);
     setLoading(true);
-    // try {
-    //   const result = await doLogin(input);
-    //   // callback
-    //   if (onComplete) {
-    //     onComplete(result);
-    //   }
-    // } catch (err) {
-    //   // console.log(err);
-    //   setAlert({
-    //     type: 'error',
-    //     message: 'Invalid credential.',
-    //   });
-    // }
+    try {
+      const result = await doLoginGoogle({
+        email,
+        token: accessToken,
+      });
+      // callback
+      if (onComplete) {
+        onComplete(result);
+      }
+    } catch (err) {
+      setAlert({
+        type: 'error',
+        message: 'Invalid credential.',
+      });
+    }
     setLoading(false);
   };
 
@@ -88,6 +91,7 @@ export default function LoginForm({ onComplete, ...props }) {
       )}
       <Box>
         <GoogleAuthBtn
+          text="Log in with Google"
           disabled={loading}
           onAuth={handleGoogleLogin}
         />

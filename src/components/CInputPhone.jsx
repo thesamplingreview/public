@@ -8,7 +8,7 @@ import CSelect from './CSelect.jsx';
 export default function CInputPhone({
   value,
   name = '',
-  // prefixes = [],
+  disabled = false,
   onChange,
   ...props
 }) {
@@ -72,6 +72,7 @@ export default function CInputPhone({
         <CSelect
           value={valuePrefix}
           options={prefixes}
+          disabled={disabled}
           renderValue={(val) => val}
           sx={{ width: 90 }}
           onChange={handleChangePrefix}
@@ -80,6 +81,7 @@ export default function CInputPhone({
       <Grid xs>
         <CInput
           {...props}
+          disabled={disabled}
           value={valueNumber}
           onChange={handleChangeNumber}
         />
