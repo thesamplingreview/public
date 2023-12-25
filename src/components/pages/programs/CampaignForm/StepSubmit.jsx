@@ -9,10 +9,10 @@ import AlertTitle from '@mui/material/AlertTitle';
 import CIcon from '@/components/CIcon.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
 import { useContextState } from './hooks';
+import EditorContent from './comps/EditorContent.jsx';
 
 export default function StepSubmit({ onPrev, onSubmit }) {
   const [data, saving, validator] = useContextState(['data', 'saving', 'validator']);
-  console.log(data)
 
   const errorMessage = useMemo(() => {
     if (!validator) {
@@ -56,15 +56,10 @@ export default function StepSubmit({ onPrev, onSubmit }) {
           {data.presubmit_title || 'Almost Done'}
         </Typography>
         {data.presubmit_description && (
-          <Typography
-            component="div"
-            variant="body1"
+          <EditorContent
+            content={data.presubmit_description}
             color="text.light"
-            fontWeight="300"
-            lineHeight="1.75"
-          >
-            {data.presubmit_description}
-          </Typography>
+          />
         )}
       </Box>
 

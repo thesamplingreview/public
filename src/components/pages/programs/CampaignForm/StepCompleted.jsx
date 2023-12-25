@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import config from '@/config/app';
 import CButton from '@/components/CButton.jsx';
 import { useContextState } from './hooks';
+import EditorContent from './comps/EditorContent.jsx';
 
 export default function StepCompleted({ mounted }) {
   const [data, submission] = useContextState(['data', 'submission']);
@@ -43,16 +44,10 @@ export default function StepCompleted({ mounted }) {
         {data.postsubmit_title || 'Great Program Enrolled!'}
       </Typography>
       {data.postsubmit_description && (
-        <Typography
-          component="div"
-          variant="body1"
+        <EditorContent
+          content={data.postsubmit_description}
           color="text.light"
-          fontWeight="300"
-          fontSize="1.125rem"
-          lineHeight="1.75"
-        >
-          {data.postsubmit_description}
-        </Typography>
+        />
       )}
       <Box mt={3}>
         <Typography

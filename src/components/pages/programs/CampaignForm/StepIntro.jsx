@@ -2,12 +2,12 @@
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import EditorContent from './comps/EditorContent.jsx';
 import FButton from './comps/FButton.jsx';
 import { useContextState } from './hooks';
 
 export default function StepIntro({ mounted, onNext }) {
   const data = useContextState('data');
-  console.log(data);
 
   return (
     <Box
@@ -40,17 +40,13 @@ export default function StepIntro({ mounted, onNext }) {
         {data.intro_title}
       </Typography>
       {data.intro_description && (
-        <Typography
-          component="div"
-          variant="h5"
+        <EditorContent
+          content={data.intro_description}
+          fontSize="1rem"
           color="text.light"
-          fontWeight="300"
-          lineHeight="1.75"
-        >
-          {data.intro_description}
-        </Typography>
+        />
       )}
-      <Box mt={6}>
+      <Box mt={6} mb={6}>
         <FButton text="Get Start" onClick={onNext} />
       </Box>
     </Box>

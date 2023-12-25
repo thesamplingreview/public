@@ -5,12 +5,14 @@ import { CInputBase, CInputControl } from '@/components/CInput.jsx';
 export default function CSelect({
   options = [],
   label,
+  value,
   size,
   required,
   error,
   helperText,
   placeholder,
   controlProps,
+  renderValue,
   ...props
 }) {
   return (
@@ -25,14 +27,22 @@ export default function CSelect({
       <Select
         {...props}
         label={label}
+        value={value}
         input={<CInputBase disableUnderline />}
-        sx={{
-          '& .MuiSelect-select': {
-            py: '.875em',
-            pl: '1.5em',
-            pr: '2.5em !important',
+        displayEmpty
+        sx={[
+          {
+            '& .MuiSelect-select': {
+              py: '.875em',
+              pl: '1.5em',
+              pr: '2.5em !important',
+            },
           },
-        }}
+          !value && {
+            fontWeight: 300,
+            color: 'var(--color-300)',
+          },
+        ]}
       >
         {placeholder && (
           <MenuItem value="">{placeholder}</MenuItem>

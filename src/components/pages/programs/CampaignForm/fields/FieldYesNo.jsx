@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import CButton from '@/components/CButton.jsx';
+import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
 export default function FieldYesNo({
@@ -83,6 +84,17 @@ export default function FieldYesNo({
             </CButton>
           ))}
         </Stack>
+        {field.hint && (
+          <HintText
+            text={toStringWithData(field.hint, {
+              count: internalValue.length,
+              total: maxCount,
+              left: maxCount - internalValue.length,
+            })}
+            textAlign="center"
+            mt={4}
+          />
+        )}
       </Box>
       <FieldAction
         disabled={!isNextable}
