@@ -12,7 +12,6 @@ export default function CSelect({
   helperText,
   placeholder,
   controlProps,
-  renderValue,
   ...props
 }) {
   return (
