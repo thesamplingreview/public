@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Unstable_Grid2';
 import { toStringWithData } from '@/helpers/utils';
 import CButton from '@/components/CButton.jsx';
 import HintText from '../comps/HintText.jsx';
@@ -16,6 +16,25 @@ export default function FieldSelect({
   onPrev,
   onNext,
 }) {
+  const columnSize = useMemo(() => {
+    if (field.config?.layout) {
+      const layout = Number(field.config.layout);
+      if (layout === 1) {
+        return 12;
+      }
+      if (layout === 2) {
+        return 6;
+      }
+      if (layout === 3) {
+        return 4;
+      }
+      if (layout === 4) {
+        return 3;
+      }
+    }
+    return 'auto';
+  }, [field.config]);
+
   const maxCount = useMemo(() => {
     return Number(field.config?.select_count || 1);
   }, [field.config]);
@@ -46,7 +65,6 @@ export default function FieldSelect({
 
   const handleSelect = (opt) => {
     let newValue;
-
     // different behavior for multiple & single selection
     if (maxCount > 1) {
       if (internalValue.includes(opt.id)) { // deselect
@@ -69,59 +87,62 @@ export default function FieldSelect({
   return (
     <>
       <Box width="40rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
-        <Stack justifyContent="center" direction="row" gap={3}>
+        <Grid container justifyContent="center" spacing={3}>
           {field.options.map((opt) => (
-            <CButton
-              key={opt.id}
-              variant="outlined"
-              color="text"
-              size="small"
-              startIcon={(
-                <Box
-                  width=".35em"
-                  height=".35em"
-                  borderRadius="50%"
-                  border="1px solid rgba(63, 64, 71, 0.5)"
-                  sx={[
-                    {
-                      transition: 'background .3s, border .3s',
-                    },
-                    internalValue.includes(opt.id) && ((theme) => ({
-                      bgcolor: theme.palette.primary.main,
-                      borderColor: theme.palette.primary.main,
-                    })),
-                  ]}
-                />
-              )}
-              sx={[
-                {
-                  position: 'relative',
-                  boxShadow: '0 1px 3px rgba(0,0,0,.15)',
-                  bgcolor: '#fff',
-                  px: 3,
-                  transition: 'all .3s',
-                  '&:hover': {
+            <Grid key={opt.id} xs={12} lg={columnSize}>
+              <CButton
+                variant="outlined"
+                color="text"
+                size="small"
+                fullWidth
+                startIcon={(
+                  <Box
+                    width=".35em"
+                    height=".35em"
+                    borderRadius="50%"
+                    border="1px solid rgba(63, 64, 71, 0.5)"
+                    sx={[
+                      {
+                        transition: 'background .3s, border .3s',
+                      },
+                      internalValue.includes(opt.id) && ((theme) => ({
+                        bgcolor: theme.palette.primary.main,
+                        borderColor: theme.palette.primary.main,
+                      })),
+                    ]}
+                  />
+                )}
+                sx={[
+                  {
+                    position: 'relative',
+                    boxShadow: '0 1px 3px rgba(0,0,0,.15)',
                     bgcolor: '#fff',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 3px 6px rgba(0,0,0,.25)',
+                    px: 3,
+                    justifyContent: 'flex-start',
+                    transition: 'all .3s',
+                    '&:hover': {
+                      bgcolor: '#fff',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 3px 6px rgba(0,0,0,.25)',
+                    },
                   },
-                },
-                internalValue.includes(opt.id) && ((theme) => ({
-                  color: theme.palette.primary.main,
-                  borderColor: theme.palette.primary.main,
-                  outline: `1px solid ${theme.palette.primary.main}`,
-                  '&:hover': {
+                  internalValue.includes(opt.id) && ((theme) => ({
+                    color: theme.palette.primary.main,
                     borderColor: theme.palette.primary.main,
-                  },
-                })),
-              ]}
-              disabled={checkDisabled(opt.id)}
-              onClick={() => handleSelect(opt)}
-            >
-              {opt.name}
-            </CButton>
+                    outline: `1px solid ${theme.palette.primary.main}`,
+                    '&:hover': {
+                      borderColor: theme.palette.primary.main,
+                    },
+                  })),
+                ]}
+                disabled={checkDisabled(opt.id)}
+                onClick={() => handleSelect(opt)}
+              >
+                {opt.name}
+              </CButton>
+            </Grid>
           ))}
-        </Stack>
+        </Grid>
         {field.hint && (
           <HintText
             text={toStringWithData(field.hint, {

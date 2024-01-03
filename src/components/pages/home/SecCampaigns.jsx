@@ -42,7 +42,7 @@ export default function SecCampaigns({ initData }) {
     return [
       { id: 'current', name: 'Current Programs', color: '#60e4e4' },
       { id: 'coming', name: 'Coming Soon', color: '#FB8F34' },
-      { id: 'past', name: 'Past', color: '#c0c2d4' },
+      // { id: 'past', name: 'Past', color: '#c0c2d4' },
     ];
   }, []);
 
@@ -80,8 +80,14 @@ export default function SecCampaigns({ initData }) {
         background: 'linear-gradient(180deg, #ffffff 0%, #f6f7ff 100%)',
       }}
     >
-      <Container maxWidth="xl">
-        <Box display="flex" alignItems="center" justifyContent="center" gap={3} mb={6}>
+      <Container maxWidth="xl" sx={{ overflow: 'auto' }}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          gap={{ xs: 2, sm: 3 }}
+          mb={6}
+        >
           {navs.map((nav) => (
             <NavButton
               key={nav.id}
@@ -89,6 +95,13 @@ export default function SecCampaigns({ initData }) {
                 bg: nav.color,
                 active: nav.id === view,
               }}
+              sx={[
+                (theme) => ({
+                  [theme.breakpoints.up('sm')]: {
+                    minWidth: 200,
+                  },
+                }),
+              ]}
               onClick={() => setView(nav.id)}
             >
               {nav.name}
@@ -97,7 +110,7 @@ export default function SecCampaigns({ initData }) {
         </Box>
       </Container>
 
-      <Container maxWidth="sm" sx={{ mb: 6 }}>
+      <Container maxWidth="lg" sx={{ mb: 6 }}>
         {loading && (
           <CLoader />
         )}
@@ -117,9 +130,9 @@ export default function SecCampaigns({ initData }) {
         )}
 
         {!loading && dataset.length > 0 && (
-          <Grid container spacing={3}>
+          <Grid container justifyContent="center" spacing={4}>
             {dataset.map((item) => (
-              <Grid key={item.id} xs={12}>
+              <Grid key={item.id} xs={12} lg={6}>
                 <CampaignCard key={item.id} data={item} />
               </Grid>
             ))}

@@ -10,7 +10,7 @@ export const CInputBase = styled(Input)(({ theme }) => ({
   fontWeight: '500',
   borderRadius: '2em',
   border: '1px solid transparent',
-  backgroundColor: 'rgba(0,0,0,.06)',
+  backgroundColor: '#edefff',
   transition: 'border .3s, background .3s, outline .3s',
   '&:hover': {
     borderColor: 'rgba(0,0,0,.4)',

@@ -77,7 +77,7 @@ export default function PasswordForm() {
       component="form"
       bgcolor="#fff"
       borderRadius="1rem"
-      p={{ md: 3, lg: 4 }}
+      p={4}
       sx={{ boxShadow: '0 2px 4px rgba(0,0,0,.15)' }}
       onSubmit={handleSubmit}
     >

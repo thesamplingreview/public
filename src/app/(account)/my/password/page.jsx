@@ -1,22 +1,18 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
+import PageTitle from '@/components/pages/account/PageTitle.jsx';
 import SideNav from '@/components/pages/account/SideNav.jsx';
 import PasswordForm from '@/components/pages/account/PasswordForm.jsx';
 
 export default function MyAccount() {
   return (
-    <>
-      <Typography variant="h1" mb={4}>
-        Change Password
-      </Typography>
-      <Grid container spacing={5}>
-        <Grid xs={12} md={9}>
-          <PasswordForm />
-        </Grid>
-        <Grid xs={12} md={3} order={{ md: -1 }}>
-          <SideNav current="password" />
-        </Grid>
+    <Grid container spacing={{ xs: 3, md: 5 }}>
+      <Grid xs={12} md={4} lg={3}>
+        <SideNav current="password" />
       </Grid>
-    </>
+      <Grid xs={12} md={8} lg={9}>
+        <PageTitle icon="lock" title="Change Password" mb={3} />
+        <PasswordForm />
+      </Grid>
+    </Grid>
   );
 }

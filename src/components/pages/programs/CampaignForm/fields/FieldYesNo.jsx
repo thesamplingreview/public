@@ -86,11 +86,7 @@ export default function FieldYesNo({
         </Stack>
         {field.hint && (
           <HintText
-            text={toStringWithData(field.hint, {
-              count: internalValue.length,
-              total: maxCount,
-              left: maxCount - internalValue.length,
-            })}
+            text={field.hint}
             textAlign="center"
             mt={4}
           />

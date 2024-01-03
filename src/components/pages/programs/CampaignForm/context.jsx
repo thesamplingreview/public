@@ -79,12 +79,19 @@ export const FormProvider = ({
         };
       }
       if (field.type === 'select') {
+        const options = field.options?.map((d) => ({
+          id: d.label,
+          key: d.key,
+          name: d.label,
+          sub: d.sublabel,
+          image_url: d.image_url,
+        })) || [];
+        const hasImage = options.some((d) => d.image_url);
         return {
           ...field,
-          options: field.options?.split('\n').map((v) => ({
-            id: v,
-            name: v,
-          })) || [],
+          options,
+          // enable custom type `select_image`
+          type: hasImage ? 'select_image' : 'select',
         };
       }
       return field;
@@ -116,11 +123,10 @@ export const FormProvider = ({
     setSaving(true);
     try {
       const formdata = {
-        campaign_id: data.id,
         form_id: data.form_id,
         submissions: JSON.stringify(input),
       };
-      const result = await doFetch('/v1/app/campaigns/enrolment', {
+      const result = await doFetch(`/v1/app/campaigns/${slug}/enrolment`, {
         method: 'POST',
         data: formdata,
       });
@@ -140,7 +146,7 @@ export const FormProvider = ({
       setError(err);
     }
     setSaving(false);
-  }, [input, data.id, data.form_id, doFetch]);
+  }, [slug, input, data.form_id, doFetch]);
 
   useOnce(() => {
     fetchData();

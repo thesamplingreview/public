@@ -15,8 +15,7 @@ export default async function SectionHero() {
         <Box maxWidth="680px" textAlign="center" mx="auto">
           <Typography
             variant="h1"
-            fontSize="2.5rem"
-            // fontWeight="500"
+            fontSize={{ xs: '2rem', sm: '2.5rem' }}
             lineHeight="1.35"
             mb={2}
           >
@@ -24,7 +23,7 @@ export default async function SectionHero() {
           </Typography>
           <Typography
             component="div"
-            variant="h5"
+            fontSize={{ xs: '1rem', sm: '1.25rem' }}
             fontWeight="300"
             color="text.light"
             lineHeight="1.75"

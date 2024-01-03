@@ -10,8 +10,10 @@ export default function CampaignCardHorizontal({ data }) {
   return (
     <Box
       display="flex"
+      flexDirection={{ xs: 'column', sm: 'row' }}
       position="relative"
       bgcolor="#fff"
+      height="100%"
       borderRadius="1rem"
       overflow="hidden"
       sx={{
@@ -27,12 +29,13 @@ export default function CampaignCardHorizontal({ data }) {
         component="header"
         position="relative"
         bgcolor="background.main"
-        width="200px"
+        width={{ xs: '100%', sm: '200px' }}
+        height={{ xs: '240px', sm: '100%' }}
         flex="0 0 auto"
       >
         <Box
           component="img"
-          src={data.cover_url}
+          src={data.cover_url || '/images/placeholder.svg'}
           position="absolute"
           top="0"
           left="0"
@@ -42,6 +45,8 @@ export default function CampaignCardHorizontal({ data }) {
         />
       </Box>
       <Box
+        display="flex"
+        flexDirection="column"
         flexGrow="1"
         px={4}
         py={3}
@@ -67,7 +72,7 @@ export default function CampaignCardHorizontal({ data }) {
             </Box>
           )}
         </Box>
-        <Typography variant="body2" component="div" mt={1}>
+        <Typography variant="body2" component="div" flexGrow="1" mt={1}>
           {data.description}
         </Typography>
         <Box mt={3}>

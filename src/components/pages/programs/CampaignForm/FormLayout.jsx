@@ -21,9 +21,9 @@ import styles from './FormLayout.module.css';
 export default function FormLayout() {
   const $item = useRef(null);
   const [
-    loading, completed, formLayout,
+    loading, completed, formLayout, data,
   ] = useContextState([
-    'loading', 'completed', 'formLayout',
+    'loading', 'completed', 'formLayout', 'data',
   ]);
   const [step, setStep] = useStep();
   const doSubmit = useSubmit();
@@ -70,68 +70,88 @@ export default function FormLayout() {
   }, [loading]);
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
-      <Header />
-      <Box
-        component="main"
-        flexGrow="1"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        flexDirection="column"
-        px={3}
-      >
-        {loading && <CLoader />}
+    <>
+      {/* background */}
+      {data?.background_url && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          sx={{
+            pointerEvents: 'none',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundImage: `url(${data.background_url})`,
+          }}
+        />
+      )}
 
-        {!loading && (
-          <SwitchTransition mode="out-in">
-            <CSSTransition
-              key={`${step}_${completed}`}
-              nodeRef={$item}
-              timeout={500}
-              classNames={{ ...transitionClassNames }}
-            >
-              <Box ref={$item} height="100%" mx="auto">
-                {/* status - complete */}
-                {completed && (
-                  <StepCompleted
-                    mounted={mounted}
-                  />
-                )}
+      <Box position="relative" display="flex" flexDirection="column" height="100vh">
+        <Header />
+        <Box
+          component="main"
+          flexGrow="1"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
+          px={3}
+        >
+          {loading && <CLoader />}
 
-                {/* form */}
-                {!completed && (
-                  <>
-                    {step === 0 && (
-                      <StepIntro
-                        mounted={mounted}
-                        onNext={handleNext}
-                      />
-                    )}
-                    {step > 0 && step <= formLayout.length && (
-                      <StepDynamic
-                        key={step}
-                        step={step}
-                        onPrev={handlePrev}
-                        onNext={handleNext}
-                      />
-                    )}
-                    {step > formLayout.length && (
-                      <StepSubmit
-                        onPrev={handlePrev}
-                        onSubmit={handleSubmit}
-                      />
-                    )}
-                  </>
-                )}
-              </Box>
-            </CSSTransition>
-          </SwitchTransition>
-        )}
+          {!loading && (
+            <SwitchTransition mode="out-in">
+              <CSSTransition
+                key={`${step}_${completed}`}
+                nodeRef={$item}
+                timeout={500}
+                classNames={{ ...transitionClassNames }}
+              >
+                <Box ref={$item} width="100%" height="100%">
+                  {/* status - complete */}
+                  {completed && (
+                    <StepCompleted
+                      mounted={mounted}
+                    />
+                  )}
+
+                  {/* form */}
+                  {!completed && (
+                    <>
+                      {step === 0 && (
+                        <StepIntro
+                          mounted={mounted}
+                          onNext={handleNext}
+                        />
+                      )}
+                      {step > 0 && step <= formLayout.length && (
+                        <StepDynamic
+                          key={step}
+                          step={step}
+                          onPrev={handlePrev}
+                          onNext={handleNext}
+                        />
+                      )}
+                      {step > formLayout.length && (
+                        <StepSubmit
+                          onPrev={handlePrev}
+                          onSubmit={handleSubmit}
+                        />
+                      )}
+                    </>
+                  )}
+                </Box>
+              </CSSTransition>
+            </SwitchTransition>
+          )}
+        </Box>
+
+        <FormProgress />
       </Box>
-
-      <FormProgress />
-    </Box>
+    </>
   );
 }
 
@@ -141,7 +161,6 @@ function Header() {
       component="header"
       height="6.25rem"
       flex="0 0 auto"
-      bgcolor="#fff"
     >
       <Container
         maxWidth="xl"

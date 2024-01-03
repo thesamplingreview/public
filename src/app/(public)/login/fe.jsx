@@ -25,7 +25,7 @@ export default function LoginClient() {
         Log In
       </Typography>
       <Typography variant="body1" color="text.light" mb={4}>
-        Welcome back. Lorem ipsuem
+        Howdy, welcome back.
       </Typography>
 
       <LoginForm />

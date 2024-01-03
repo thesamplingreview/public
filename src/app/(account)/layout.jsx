@@ -30,7 +30,7 @@ export default function Layout({ children }) {
       <Box
         component="main"
         flexGrow="1"
-        py={7}
+        py={{ xs: 2, md: 5, lg: 7 }}
         sx={{
           background: 'linear-gradient(135deg, #ffffff 0%, #f6f7ff 100%)',
         }}

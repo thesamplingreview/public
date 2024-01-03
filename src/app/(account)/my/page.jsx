@@ -1,22 +1,18 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
+import PageTitle from '@/components/pages/account/PageTitle.jsx';
 import SideNav from '@/components/pages/account/SideNav.jsx';
 import ProgramList from '@/components/pages/account/ProgramList.jsx';
 
 export default function MyPassword() {
   return (
-    <>
-      <Typography variant="h1" mb={4}>
-        My Programs
-      </Typography>
-      <Grid container spacing={5}>
-        <Grid xs={12} md={9}>
-          <ProgramList />
-        </Grid>
-        <Grid xs={12} md={3} order={{ md: -1 }}>
-          <SideNav current="campaigns" />
-        </Grid>
+    <Grid container spacing={{ xs: 3, md: 5 }}>
+      <Grid xs={12} md={4} lg={3}>
+        <SideNav current="campaigns" />
       </Grid>
-    </>
+      <Grid xs={12} md={8} lg={9}>
+        <PageTitle icon="form" title="My Programs" mb={3} />
+        <ProgramList />
+      </Grid>
+    </Grid>
   );
 }

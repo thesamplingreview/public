@@ -36,7 +36,7 @@ export default function Login() {
               />
             </Box>
           </Grid>
-          <Grid md={6} lg={5}>
+          <Grid xs={12} md={6} lg={5}>
             <Box
               display="flex"
               alignItems="center"

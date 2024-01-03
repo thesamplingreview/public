@@ -27,7 +27,7 @@ export default function SignupClient() {
         Sign Up
       </Typography>
       <Typography variant="body1" color="text.light" mb={4}>
-        Lorem ipsuem
+        Create your account and join our sampling programs for free.
       </Typography>
 
       <SignupForm />

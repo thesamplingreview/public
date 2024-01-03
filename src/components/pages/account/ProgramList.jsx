@@ -1,33 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-import { format } from 'date-fns';
+import Image from 'next/image';
+import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import config from '@/config/app';
 import { useOnce } from '@/hooks/ui';
 import { useFetch } from '@/hooks/fetcher';
 import CButton from '@/components/CButton.jsx';
 import CIcon from '@/components/CIcon.jsx';
+import CLoader from '@/components/CLoader.jsx';
+import ProgramCard from './ProgramCard.jsx';
 
 export default function ProgramList() {
   const doFetch = useFetch();
 
   const [dataset, setDataset] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const { code, data } = await doFetch('/v1/app/my/campaigns');
       if (code !== 200) {
-        throw new Error('Failed to retrieve programs.');
+        throw new Error('Unable to retrieve user programs.');
       }
-      console.log(data);
       setDataset(data);
     } catch (err) {
-      console.log(err);
+      setError(err);
     }
     setLoading(false);
   };
@@ -35,6 +37,56 @@ export default function ProgramList() {
   useOnce(() => {
     fetchData();
   });
+
+  if (loading) {
+    return (
+      <Box textAlign="center" py={8}>
+        <CLoader />
+        <Typography variant="body2" color="text.light">
+          Fetching your programs...
+        </Typography>
+      </Box>
+    );
+  }
+  if (error) {
+    return (
+      <Box textAlign="center" py={5}>
+        <CIcon name="alert" size="6rem" color="text.light" />
+        <Typography variant="body1" fontWeight="500" mt={2}>
+          Something went wrong. Please try again.
+        </Typography>
+        <Typography variant="body2" color="text.light" mt={1}>
+          #err: {error.message}
+        </Typography>
+      </Box>
+    );
+  }
+  if (!dataset.length) {
+    return (
+      <Box textAlign="center" py={5}>
+        <Box sx={{ opacity: '0.5' }}>
+          <Image
+            src="/images/img-search.svg"
+            alt="Empty"
+            width="120"
+            height="120"
+          />
+        </Box>
+        <Typography variant="body2" color="text.light" mt={2}>
+          You did not joined any program yet
+        </Typography>
+        <Box mt={3}>
+          <CButton
+            component={Link}
+            href="/"
+            variant="contained"
+          >
+            Browse our programs
+          </CButton>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -44,67 +96,13 @@ export default function ProgramList() {
       <Grid container spacing={3}>
         {dataset.map((data) => (
           <Grid key={data.id} xs={12} md={4}>
-            <CampaignItem data={data} />
+            <ProgramCard
+              data={data}
+              refetch={fetchData}
+            />
           </Grid>
         ))}
       </Grid>
     </>
-  );
-}
-
-function CampaignItem({ data }) {
-  console.log(data);
-  const submission = data.enrolments?.[0] || {};
-
-  return (
-    <Box
-      position="relative"
-      display="flex"
-      flexDirection="column"
-      bgcolor="#fff"
-      borderRadius="1rem"
-      overflow="hidden"
-      sx={{
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        transition: 'box-shadow .3s, transform .3s',
-        '&:hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: '3px 6px 9px rgba(0,0,0,0.2)',
-        },
-      }}
-    >
-      <Box
-        component="header"
-        position="relative"
-        bgcolor="background.main"
-        pb="66.67%"
-      >
-        <Box
-          component="img"
-          src={data.cover_url}
-          position="absolute"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          sx={{ objectFit: 'cover' }}
-        />
-      </Box>
-      <Box
-        flexGrow="1"
-        px={4}
-        py={3}
-      >
-        <Typography variant="h6" fontWeight="500" mb={1}>
-          {data.name}
-        </Typography>
-        <Typography variant="body2" mb={0.5}>
-            Date: {format(new Date(submission.created_at), config.formatDateTime)}
-        </Typography>
-        <Typography variant="body2" mb={0.5}>
-            Enrollment ID: {submission.id}
-        </Typography>
-      </Box>
-    </Box>
   );
 }
