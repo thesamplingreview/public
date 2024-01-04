@@ -1,19 +1,24 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import request from '@/helpers/request';
-import CInput from '@/components/CInput.jsx';
+import CInputPassword from '@/components/CInputPassword.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
 
 function genDefaultInput() {
   return {
-    email: '',
+    password: '',
+    passwordConfirm: '',
   };
 }
 
-export default function ForgotForm({ ...props }) {
+export default function ResetForm({ ...props }) {
+  const params = useParams();
+  const searchParams = useSearchParams();
+
   const [input, setInput] = useState(genDefaultInput());
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
@@ -28,24 +33,36 @@ export default function ForgotForm({ ...props }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // validation
+    if (input.password !== input.passwordConfirm) {
+      setAlert({
+        type: 'error',
+        message: 'Password not match.',
+      });
+      return;
+    }
+
     setAlert(null);
     setLoading(true);
     try {
-      await request('/v1/auth/password/reset-token', {
+      const formdata = {
+        password: input.password,
+        token: params.token,
+        email: searchParams.get('email'),
+      };
+      await request('/v1/auth/password/reset', {
         method: 'POST',
-        data: input,
+        data: formdata,
       });
       setInput(genDefaultInput());
       setAlert({
         type: 'success',
-        message: 'Password reset has been sent.',
+        message: 'Password has successfully reset.',
       });
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
       setAlert({
         type: 'error',
-        message: 'Invalid email or email not found.',
+        message: 'Invalid token or token expired.',
       });
     }
     setLoading(false);
@@ -66,12 +83,20 @@ export default function ForgotForm({ ...props }) {
         </Alert>
       )}
       <Box>
-        <CInput
-          type="email"
-          name="email"
-          placeholder="Login Email"
+        <CInputPassword
+          name="password"
+          placeholder="New password"
           required
-          value={input.email}
+          value={input.password}
+          onChange={handleChange}
+        />
+      </Box>
+      <Box mt={2}>
+        <CInputPassword
+          name="passwordConfirm"
+          placeholder="Re-enter password"
+          required
+          value={input.passwordConfirm}
           onChange={handleChange}
         />
       </Box>
@@ -84,7 +109,7 @@ export default function ForgotForm({ ...props }) {
           rounded
           loading={loading}
         >
-          Generate Reset Email
+          Reset Password
         </CLoadingButton>
       </Box>
     </Box>
