@@ -8,6 +8,7 @@
     "start": "next start",
     "test": "node test",
     "lint": "next lint",
+    "apprunner:run": "npm run build && npm run start",
     "build:icon": "svg-sprite-generate -d src/assets/icons -o public/sprite.svg"
   },
   "dependencies": {
