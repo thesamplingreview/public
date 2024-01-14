@@ -1,0 +1,38 @@
+version: 1.0
+runtime: nodejs18
+build:
+  commands:
+    - npm ci
+    - npm run build
+  env:
+    - name: APP_NAME
+      value: "SamplingReview"
+    - name: APP_URL
+      value: https://nh9wrvmxgi.ap-southeast-1.awsapprunner.com
+    - name: APP_ENV
+      value: production
+    - name: APP_DEBUG
+      value: false
+    - name: GOOGLE_CLIENT_ID
+      value: 847405099926-3tnl19aen0pi7f3sft5ic031d0bklbss.apps.googleusercontent.com
+    - name: NEXT_PUBLIC_API
+      value: https://fj3h52jpmn.ap-southeast-1.awsapprunner.com
+
+run:
+  runtime-version: 18.x
+  command: npm run start
+  network:
+    port: 3000
+  env:
+    - name: APP_NAME
+      value: "SamplingReview"
+    - name: APP_URL
+      value: https://nh9wrvmxgi.ap-southeast-1.awsapprunner.com
+    - name: APP_ENV
+      value: production
+    - name: APP_DEBUG
+      value: false
+    - name: GOOGLE_CLIENT_ID
+      value: 847405099926-3tnl19aen0pi7f3sft5ic031d0bklbss.apps.googleusercontent.com
+    - name: NEXT_PUBLIC_API
+      value: https://fj3h52jpmn.ap-southeast-1.awsapprunner.com
