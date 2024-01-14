@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+console.log(process.env);
 const nextConfig = {
   env: {
     NEXT_PUBLIC_URL: process.env.APP_URL,
