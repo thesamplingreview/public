@@ -30,6 +30,7 @@ export default function StepSubmit({ onPrev, onSubmit }) {
       width="40rem"
       maxWidth="100%"
       py={3}
+      mx="auto"
     >
       {/* body */}
       <Box
