@@ -18,7 +18,7 @@ export default function FieldAddress({
   onPrev,
   onNext,
 }) {
-  const $input = useRef(null);
+  const $el = useRef(null);
 
   const isNextable = useMemo(() => {
     if (field.mandatory) {
@@ -51,17 +51,19 @@ export default function FieldAddress({
   };
 
   useEffect(() => {
-    $input.current.focus();
+    const $input = $el.current.querySelector('input, textarea');
+    if ($input) {
+      $input.focus();
+    }
   }, []);
 
   return (
     <>
       <Box width="32rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
-        <Grid container spacing={2}>
+        <Grid ref={$el} container spacing={2}>
           {field.config?.fields?.includes('name') && (
             <Grid xs={12}>
               <CInput
-                inputRef={$input}
                 placeholder="Recipient name"
                 name="name"
                 value={value?.name || ''}
