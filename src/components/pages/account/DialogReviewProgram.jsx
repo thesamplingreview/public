@@ -40,13 +40,13 @@ export default function DialogReviewProgram({
       <DialogTitle>
         Submit your review
       </DialogTitle>
-      {data.review_type === 'redirect2' && (
+      {data.review_type === 'redirect' && (
         <ContentRedirect
           data={data}
           onClose={handleClose}
         />
       )}
-      {data.review_type === 'redirect' && (
+      {data.review_type === 'form' && (
         <ContentReviewForm
           data={data}
           onClose={handleClose}
