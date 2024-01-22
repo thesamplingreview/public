@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
   const data = await fetchDetail(params.slug);
   if (data) {
     return {
-      title: data.meta_title || data.name,
+      title: `${data.meta_title || data.name} | SamplingReview`,
       description: data.meta_description || '',
     };
   }

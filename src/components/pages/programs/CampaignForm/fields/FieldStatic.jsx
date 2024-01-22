@@ -12,7 +12,7 @@ export default function FieldStatic({
 }) {
   return (
     <>
-      <Box width="32rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
+      <Box width="32rem" maxWidth="100%" mx="auto" mb={6}>
         {field.config?.content && (
           <Box textAlign="center">
             <EditorContent

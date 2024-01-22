@@ -31,7 +31,7 @@ export default function FieldYesNo({
 
   return (
     <>
-      <Box width="40rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
+      <Box width="40rem" maxWidth="100%" mx="auto" mb={6}>
         <Stack justifyContent="center" direction="row" gap={3}>
           {field.options.map((opt) => (
             <CButton

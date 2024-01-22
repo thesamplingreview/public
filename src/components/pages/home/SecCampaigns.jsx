@@ -137,7 +137,7 @@ export default function SecCampaigns({ initData }) {
             spacing={4}
           >
             {dataset.map((item) => (
-              <Grid key={item.id} xs={12} lg={6}>
+              <Grid key={item.id} xs={12} md={6}>
                 <CampaignCard key={item.id} data={item} />
               </Grid>
             ))}

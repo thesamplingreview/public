@@ -25,6 +25,7 @@ export default function StepDynamic({ step, onPrev, onNext }) {
     <Box
       display="flex"
       alignItems="center"
+      justifyContent="center"
       flexDirection="column"
       height="100%"
       py={3}

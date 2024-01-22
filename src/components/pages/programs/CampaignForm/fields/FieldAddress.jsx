@@ -59,7 +59,7 @@ export default function FieldAddress({
 
   return (
     <>
-      <Box width="32rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
+      <Box width="32rem" maxWidth="100%" mx="auto" mb={6}>
         <Grid ref={$el} container spacing={2}>
           {field.config?.fields?.includes('name') && (
             <Grid xs={12}>

@@ -122,7 +122,7 @@ export default function FieldProduct({
 
   return (
     <>
-      <Box width="50rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
+      <Box width="50rem" maxWidth="100%" mx="auto" mb={6}>
         <Grid container justifyContent="center" spacing={3}>
           {filteredProducts.map((opt) => (
             <Grid key={opt.id} xs={6} md={3}>

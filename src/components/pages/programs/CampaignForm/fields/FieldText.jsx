@@ -36,7 +36,7 @@ export default function FieldText({
 
   return (
     <>
-      <Box width="32rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
+      <Box width="32rem" maxWidth="100%" mx="auto" mb={6}>
         <TextField
           inputRef={$input}
           variant="standard"

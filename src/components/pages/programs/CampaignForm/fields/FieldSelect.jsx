@@ -86,7 +86,7 @@ export default function FieldSelect({
 
   return (
     <>
-      <Box width="40rem" maxWidth="100%" mx="auto" flexGrow="1" mb={6}>
+      <Box width="40rem" maxWidth="100%" mx="auto" mb={6}>
         <Grid container justifyContent="center" spacing={3}>
           {field.options.map((opt) => (
             <Grid key={opt.id} xs={12} lg={columnSize}>
