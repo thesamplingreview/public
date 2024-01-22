@@ -49,7 +49,8 @@ export default function SecCampaigns({ initData }) {
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState(navs[0].id);
   const [dataset, setDataset] = useState(initData.dataset || []);
-  const [meta, setMeta] = useState(initData.meta || {});
+  // @todo - pagination
+  const [, setMeta] = useState(initData.meta || {});
 
   const fetchData = async () => {
     setLoading(true);
@@ -130,7 +131,11 @@ export default function SecCampaigns({ initData }) {
         )}
 
         {!loading && dataset.length > 0 && (
-          <Grid container justifyContent="center" spacing={4}>
+          <Grid
+            container
+            justifyContent={dataset.length === 1 ? 'center' : 'flex-start'}
+            spacing={4}
+          >
             {dataset.map((item) => (
               <Grid key={item.id} xs={12} lg={6}>
                 <CampaignCard key={item.id} data={item} />
