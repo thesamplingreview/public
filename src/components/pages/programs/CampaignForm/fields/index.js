@@ -4,6 +4,7 @@ import FieldSelectImage from './FieldSelectImage.jsx';
 import FieldProduct from './FieldProduct.jsx';
 import FieldYesNo from './FieldYesNo.jsx';
 import FieldFile from './FieldFile.jsx';
+import FieldState from './FieldState.jsx';
 import FieldAddress from './FieldAddress.jsx';
 import FieldStatic from './FieldStatic.jsx';
 
@@ -14,6 +15,7 @@ const fields = {
   products: FieldProduct,
   yes_no: FieldYesNo,
   file: FieldFile,
+  state: FieldState,
   address: FieldAddress,
   static: FieldStatic,
 };
