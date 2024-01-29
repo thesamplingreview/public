@@ -46,7 +46,6 @@ export default function StepCompleted({ mounted }) {
       {data.postsubmit_description && (
         <EditorContent
           content={data.postsubmit_description}
-          color="text.light"
         />
       )}
       <Box mt={3}>

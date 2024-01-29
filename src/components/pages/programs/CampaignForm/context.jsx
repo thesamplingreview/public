@@ -33,6 +33,7 @@ const initialState = {
   loading: true,
   saving: false,
   completed: false,
+  theme: 'light',
   data: null,
   submission: null,
   newSubmission: false,
@@ -54,6 +55,7 @@ export const FormProvider = ({
   const [loading, setLoading] = useState(initialState.loading);
   const [saving, setSaving] = useState(initialState.saving);
   const [completed, setCompleted] = useState(initialState.completed);
+  const [theme] = useState(initData?.theme || initialState.theme);
   const [data, setData] = useState(genData(initData));
   const [submission, setSubmission] = useState(initData?.enrolments?.[0] || null);
   const [newSubmission, setNewSubmission] = useState(initialState.newSubmission);
@@ -67,15 +69,6 @@ export const FormProvider = ({
         return {
           ...field,
           options: data.products || [],
-        };
-      }
-      if (field.type === 'yes_no') {
-        return {
-          ...field,
-          options: [
-            { id: 'Yes', name: 'Yes' },
-            { id: 'No', name: 'No' },
-          ],
         };
       }
       if (field.type === 'select') {
@@ -157,6 +150,7 @@ export const FormProvider = ({
       loading,
       saving,
       completed,
+      theme,
       data,
       error,
       validator,

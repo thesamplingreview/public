@@ -59,7 +59,6 @@ export default function StepSubmit({ onPrev, onSubmit }) {
         {data.presubmit_description && (
           <EditorContent
             content={data.presubmit_description}
-            color="text.light"
           />
         )}
       </Box>

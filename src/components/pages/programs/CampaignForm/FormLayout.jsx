@@ -21,9 +21,9 @@ import styles from './FormLayout.module.css';
 export default function FormLayout() {
   const $item = useRef(null);
   const [
-    loading, completed, formLayout, data,
+    loading, completed, theme, formLayout, data,
   ] = useContextState([
-    'loading', 'completed', 'formLayout', 'data',
+    'loading', 'completed', 'theme', 'formLayout', 'data',
   ]);
   const [step, setStep] = useStep();
   const doSubmit = useSubmit();
@@ -72,22 +72,21 @@ export default function FormLayout() {
   return (
     <>
       {/* background */}
-      {data?.background_url && (
-        <Box
-          position="fixed"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          sx={{
-            pointerEvents: 'none',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundImage: `url(${data.background_url})`,
-          }}
-        />
-      )}
+      <Box
+        position="fixed"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        sx={{
+          pointerEvents: 'none',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundColor: theme === 'dark' ? '#000000' : '#ffffff',
+          backgroundImage: data?.background_url ? `url(${data.background_url})` : null,
+        }}
+      />
 
       <Box position="relative" display="flex" flexDirection="column" height="100vh">
         <Header />
@@ -98,6 +97,7 @@ export default function FormLayout() {
           alignItems="center"
           justifyContent="center"
           flexDirection="column"
+          color={theme === 'dark' ? '#ffffff' : '#000000'}
           px={3}
         >
           {loading && <CLoader />}

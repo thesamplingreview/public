@@ -43,7 +43,6 @@ export default function StepIntro({ mounted, onNext }) {
         <EditorContent
           content={data.intro_description}
           fontSize="1rem"
-          color="text.light"
         />
       )}
       <Box mt={6} mb={6}>

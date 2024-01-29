@@ -6,7 +6,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { toStringWithData } from '@/helpers/utils';
-import { useInput } from '../hooks';
+import { useInput, useContextState } from '../hooks';
 import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
@@ -18,6 +18,7 @@ export default function FieldProduct({
   onPrev,
   onNext,
 }) {
+  const theme = useContextState('theme');
   const [input] = useInput();
 
   const maxCount = useMemo(() => {
@@ -128,6 +129,7 @@ export default function FieldProduct({
             <Grid key={opt.id} xs={6} md={3}>
               <ProductItem
                 item={opt}
+                theme={theme}
                 selected={internalValue.includes(opt.id)}
                 disabled={checkDisabled(opt.id)}
                 onClick={handleSelect}
@@ -158,6 +160,7 @@ export default function FieldProduct({
 
 function ProductItem({
   item,
+  theme,
   selected,
   disabled,
   onClick,
@@ -179,7 +182,7 @@ function ProductItem({
           width: '100%',
           height: '100%',
           boxShadow: '0 1px 3px rgba(0,0,0,.15)',
-          bgcolor: '#fff',
+          bgcolor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)',
           border: '1px solid transparent',
           borderRadius: '1rem',
           textAlign: 'center',
@@ -189,7 +192,7 @@ function ProductItem({
           py: 3,
           transition: 'all .3s',
           '&:hover': {
-            bgcolor: '#fff',
+            bgcolor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.95)',
             boxShadow: '0 3px 6px rgba(0,0,0,.25)',
             transform: 'translateY(-2px)',
           },
@@ -197,12 +200,12 @@ function ProductItem({
             opacity: '0.4',
           },
         },
-        selected && ((theme) => ({
-          color: theme.palette.primary.main,
-          borderColor: theme.palette.primary.main,
-          outline: `1px solid ${theme.palette.primary.main}`,
+        selected && ((t) => ({
+          color: t.palette.primary.main,
+          borderColor: t.palette.primary.main,
+          outline: `1px solid ${t.palette.primary.main}`,
           '&:hover': {
-            borderColor: theme.palette.primary.main,
+            borderColor: t.palette.primary.main,
           },
         })),
       ]}
@@ -229,7 +232,7 @@ function ProductItem({
         variant="h6"
         fontSize="1em"
         fontWeight="500"
-        color="text.main"
+        color={theme === 'dark' ? '#fff' : 'text.main'}
         lineHeight="1.35"
       >
         {item.name}

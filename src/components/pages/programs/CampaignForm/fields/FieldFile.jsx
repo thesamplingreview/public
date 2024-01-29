@@ -7,6 +7,7 @@ import { useFetch } from '@/hooks/fetcher';
 import CButton from '@/components/CButton.jsx';
 import CIcon from '@/components/CIcon.jsx';
 import CLoader from '@/components/CLoader.jsx';
+import { useContextState } from '../hooks';
 import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
 
@@ -19,6 +20,7 @@ export default function FieldFile({
   onNext,
 }) {
   const doFetch = useFetch();
+  const [theme] = useContextState(['theme']);
   const $file = useRef(null);
 
   const [loading, setLoading] = useState(false);
@@ -156,9 +158,10 @@ export default function FieldFile({
           alignItems="center"
           justifyContent="center"
           flexDirection="column"
-          bgcolor="background.light"
+          bgcolor={theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)'}
           borderRadius="1rem"
-          border="2px dashed #e0e2fa"
+          border="2px dashed"
+          borderColor={theme === 'dark' ? '#333333' : '#e0e2fa'}
           p={4}
           sx={[
             {
