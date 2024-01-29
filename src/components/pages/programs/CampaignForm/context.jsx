@@ -65,12 +65,6 @@ export const FormProvider = ({
 
   const formLayout = useMemo(() => {
     return data?.form.fields.map((field) => {
-      if (field.type === 'products') {
-        return {
-          ...field,
-          options: data.products || [],
-        };
-      }
       if (field.type === 'select') {
         const options = field.options?.map((d) => ({
           id: d.label,

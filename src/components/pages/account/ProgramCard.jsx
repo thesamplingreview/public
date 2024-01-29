@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -44,7 +45,8 @@ export default function ProgramCard({ data, refetch }) {
         }}
       >
         <Box
-          component="header"
+          component={Link}
+          href={`/programs/${data.slug}`}
           position="relative"
           bgcolor="background.main"
           pb="66.67%"

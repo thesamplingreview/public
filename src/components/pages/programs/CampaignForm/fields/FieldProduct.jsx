@@ -18,7 +18,7 @@ export default function FieldProduct({
   onPrev,
   onNext,
 }) {
-  const theme = useContextState('theme');
+  const [theme, data] = useContextState(['theme', 'data']);
   const [input] = useInput();
 
   const maxCount = useMemo(() => {
@@ -43,7 +43,7 @@ export default function FieldProduct({
   }, [field.mandatory, maxCount, value]);
 
   const filteredProducts = useMemo(() => {
-    return field.options.filter((product) => {
+    return data.products?.filter((product) => {
       const { filterable, config } = product.campaign_products || {};
       if (!filterable) {
         return true;
@@ -90,7 +90,7 @@ export default function FieldProduct({
 
       return isMatch;
     });
-  }, [field.options, input]);
+  }, [data.products, input]);
 
   const checkDisabled = (val) => {
     if (maxCount > 1 && internalValue.length === maxCount) {
