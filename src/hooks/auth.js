@@ -127,7 +127,7 @@ export function useSignup(provider = '') {
       // auto-login
       const user = await doLogin({
         email: input.email,
-        password: input.password,
+        token: input.token,
       });
 
       return user;
