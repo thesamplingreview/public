@@ -33,7 +33,7 @@ export default function PhoneVerificationClient() {
         Phone Verification
       </Typography>
       <Typography variant="body1" color="text.light" mb={4}>
-        Lorem ipsuem
+        Enter and verify your phone number
       </Typography>
 
       <PhoneVerificationForm onComplete={handleComplete} />
