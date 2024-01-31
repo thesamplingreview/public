@@ -106,7 +106,7 @@ export function useLogout() {
  * @return Void
  */
 export function useSignup(provider = '') {
-  const doLogin = useLogin();
+  const doLogin = useLogin('google');
 
   const doSignup = useCallback(async (input) => {
     try {
