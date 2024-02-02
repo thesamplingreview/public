@@ -11,8 +11,25 @@ export default function StepDynamic({ step, onPrev, onNext }) {
   const [input, setInput] = useInput();
 
   const field = useMemo(() => {
-    return formLayout[step - 1];
-  }, [formLayout, step]);
+    function getNextField(loop = 0) {
+      const nextField = formLayout[step - 1 + loop];
+      // apply logic checking if field should display
+      if (nextField.use_logic && nextField.logic) {
+        const isMatch = nextField.logic.every((l) => {
+          if (!input[l.field]) {
+            return false;
+          }
+          const comparedInput = Array.isArray(input[l.field]) ? input[l.field] : [input[l.field]];
+          return comparedInput.includes(l.value);
+        });
+        if (!isMatch) {
+          return getNextField(loop + 1);
+        }
+      }
+      return nextField;
+    }
+    return getNextField();
+  }, [formLayout, input, step]);
 
   const handleChange = useCallback(({ name, value }) => {
     setInput((state) => ({
@@ -20,6 +37,15 @@ export default function StepDynamic({ step, onPrev, onNext }) {
       [name]: value,
     }));
   }, [setInput]);
+
+  // force reset current field value
+  const handlePrev = () => {
+    setInput((state) => ({
+      ...state,
+      [field.id]: null,
+    }));
+    onPrev();
+  };
 
   return (
     <Box
@@ -63,7 +89,7 @@ export default function StepDynamic({ step, onPrev, onNext }) {
         field={field}
         value={input[field.id] || ''}
         onChange={handleChange}
-        onPrev={onPrev}
+        onPrev={handlePrev}
         onNext={onNext}
       />
     </Box>
