@@ -63,7 +63,15 @@ export default function Header() {
           gap={{ xs: 4, xl: 5 }}
           ml="auto"
         >
-          <NavItem href="/" name="How It Works" icon="question" />
+          {/* <NavItem
+            href="/"
+            name="How It Works"
+            icon="question"
+          /> */}
+          <NavItem
+            href="https://samplingreview.com/"
+            name="Contact Us"
+          />
           {auth && (
             <>
               <NavItem href="/my" name="My Account" icon="account" />

@@ -27,13 +27,13 @@ export default function Footer() {
           <Grid xs={12} md>
             <Box display="flex" alignItems="center"
                 fontSize="0.875em" gap={2}>
-              <FooterLink component={Link} href="/">
-                About Us
+              <FooterLink component={Link} href="https://samplingreview.com/" target="_blank">
+                Contact Us
               </FooterLink>
-              <FooterLink component={Link} href="/">
+              <FooterLink component={Link} href="https://samplingreview.com/tnc/" target="_blank">
                 Terms and Conditions
               </FooterLink>
-              <FooterLink component={Link} href="/">
+              <FooterLink component={Link} href="https://samplingreview.com/privacy/" target="_blank">
                 Privacy Policy
               </FooterLink>
             </Box>
