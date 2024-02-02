@@ -64,7 +64,7 @@ export const FormProvider = ({
   const [validator, setValidator] = useState(null);
 
   const formLayout = useMemo(() => {
-    return data?.form.fields.map((field) => {
+    return data?.form?.fields.map((field) => {
       if (field.type === 'select') {
         const options = field.options?.map((d) => ({
           id: d.label,
@@ -82,7 +82,7 @@ export const FormProvider = ({
         };
       }
       return field;
-    });
+    }) || [];
   }, [data]);
 
   const fetchData = useCallback(async () => {
