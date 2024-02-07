@@ -5,9 +5,9 @@ export default function EditorContent({ content, ...props }) {
     <Box
       width="100%"
       lineHeight="1.75"
-      color="text.light"
       {...props}
       sx={{
+        opacity: 0.75,
         '& .content': {
           '& > *': {
             mt: 0,

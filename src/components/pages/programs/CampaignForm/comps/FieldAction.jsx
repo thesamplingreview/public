@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CIcon from '@/components/CIcon.jsx';
+import { useContextState } from '../hooks';
 import FButton from './FButton.jsx';
 
 export default function FieldAction({
@@ -11,6 +12,8 @@ export default function FieldAction({
   onPrev,
   onNext,
 }) {
+  const theme = useContextState('theme');
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <FButton
@@ -24,7 +27,7 @@ export default function FieldAction({
         sx={{
           fontWeight: '300',
           fontSize: '0.75rem',
-          color: 'var(--color-300)',
+          color: theme === 'dark' ? 'rgba(255,255,255,.75)' : 'var(--color-300)',
           py: 0.5,
           mt: 2,
         }}
