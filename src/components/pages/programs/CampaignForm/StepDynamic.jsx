@@ -75,7 +75,7 @@ export default function StepDynamic({ step, onPrev, onNext }) {
           <Typography
             component="div"
             variant="body1"
-            color="text.light"
+            opacity="0.75"
             fontWeight="300"
             lineHeight="1.75"
           >
