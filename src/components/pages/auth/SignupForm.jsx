@@ -60,7 +60,7 @@ export default function SignupForm({ onComplete, ...props }) {
     } catch (err) {
       setAlert({
         type: 'error',
-        message: 'Failed to signup.',
+        message: err.message || 'Failed to signup.',
       });
     }
     setLoading(false);

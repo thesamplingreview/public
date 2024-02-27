@@ -106,7 +106,7 @@ export function useLogout() {
  * @return Void
  */
 export function useSignup(provider = '') {
-  const doLogin = useLogin('google');
+  const doLogin = useLogin(provider);
 
   const doSignup = useCallback(async (input) => {
     try {
@@ -128,6 +128,7 @@ export function useSignup(provider = '') {
       const user = await doLogin({
         email: input.email,
         token: input.token,
+        password: input.password,
       });
 
       return user;
