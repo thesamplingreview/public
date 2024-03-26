@@ -11,9 +11,18 @@ export default function PhoneVerificationClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isValidated = useValidated();
-  const [auth] = useAuth();
+  const [auth, setAuth] = useAuth();
 
   const handleComplete = () => {
+    setAuth({
+      ...auth,
+      contact_verified_at: (new Date()).valueOf(),
+    });
+    const redirectPath = searchParams.get('redirect');
+    router.push(redirectPath || '/my');
+  };
+
+  const handleSkip = () => {
     const redirectPath = searchParams.get('redirect');
     router.push(redirectPath || '/my');
   };
@@ -38,7 +47,7 @@ export default function PhoneVerificationClient() {
         Enter and verify your phone number
       </Typography>
 
-      <PhoneVerificationForm onComplete={handleComplete} />
+      <PhoneVerificationForm onComplete={handleComplete} onSkip={handleSkip} />
     </Box>
   );
 }

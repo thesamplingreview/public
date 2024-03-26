@@ -22,7 +22,7 @@ function genDefaultInput() {
   };
 }
 
-export default function PhoneVerificationForm({ onComplete, ...props }) {
+export default function PhoneVerificationForm({ onComplete, onSkip, ...props }) {
   const searchParams = useSearchParams();
   const doFetch = useFetch();
   const isValidated = useValidated();
@@ -67,7 +67,7 @@ export default function PhoneVerificationForm({ onComplete, ...props }) {
   };
 
   const handleSkip = () => {
-    onComplete();
+    onSkip();
   };
 
   return (
