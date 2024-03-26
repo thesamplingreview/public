@@ -56,7 +56,7 @@ export default function SideNav({ current }) {
           Phone number is unverified!<br />
           <Box
             component={Link}
-            href="/verify-phone"
+            href="/verify-phone?skip=true"
             fontSize="0.875em"
             fontWeight="600"
             color="warning.dark"

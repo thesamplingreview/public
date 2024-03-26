@@ -3,6 +3,7 @@
 import {
   useRef, useState, useMemo, useCallback, useEffect,
 } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Alert from '@mui/material/Alert';
@@ -22,6 +23,7 @@ function genDefaultInput() {
 }
 
 export default function PhoneVerificationForm({ onComplete, ...props }) {
+  const searchParams = useSearchParams();
   const doFetch = useFetch();
   const isValidated = useValidated();
 
@@ -62,6 +64,10 @@ export default function PhoneVerificationForm({ onComplete, ...props }) {
       });
     }
     setLoading(false);
+  };
+
+  const handleSkip = () => {
+    onComplete();
   };
 
   return (
@@ -108,6 +114,23 @@ export default function PhoneVerificationForm({ onComplete, ...props }) {
           Verify
         </CLoadingButton>
       </Box>
+      {searchParams.get('skip') === 'true' && (
+        <Box mt={1}>
+          <CButton
+            color="text"
+            fullWidth
+            sx={[
+              (theme) => ({
+                fontSize: '0.875rem',
+                color: theme.palette.text.light,
+              }),
+            ]}
+            onClick={handleSkip}
+          >
+            Skip for now
+          </CButton>
+        </Box>
+      )}
     </Box>
   );
 }
