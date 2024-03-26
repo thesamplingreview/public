@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect, useSearchParams, useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useAuth, useValidated } from '@/hooks/auth';
@@ -9,11 +9,13 @@ import PhoneVerificationForm from '@/components/pages/auth/PhoneVerificationForm
 
 export default function PhoneVerificationClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const isValidated = useValidated();
   const [auth] = useAuth();
 
   const handleComplete = () => {
-    router.push('/my');
+    const redirectPath = searchParams.get('redirect');
+    router.push(redirectPath || '/my');
   };
 
   useEffect(() => {

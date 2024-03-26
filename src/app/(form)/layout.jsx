@@ -12,8 +12,12 @@ export default function Layout({ children }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (validated && !auth) {
-      redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
+    if (validated) {
+      if (!auth) {
+        redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
+      } else if (!auth.contactVerified) {
+        redirect(`/verify-phone?redirect=${encodeURIComponent(pathname)}`);
+      }
     }
   }, [auth, validated, pathname]);
 
