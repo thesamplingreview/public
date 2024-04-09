@@ -71,7 +71,7 @@ export default function FieldAddress({
               />
             </Grid>
           )}
-          {field.config?.fields?.includes('phone') && (
+          {field.config?.fields?.includes('contact') && (
             <Grid xs={12}>
               <CInputPhone
                 placeholder="Phone number"
