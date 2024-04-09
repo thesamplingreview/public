@@ -11,25 +11,8 @@ export default function StepDynamic({ step, onPrev, onNext }) {
   const [input, setInput] = useInput();
 
   const field = useMemo(() => {
-    function getNextField(loop = 0) {
-      const nextField = formLayout[step - 1 + loop];
-      // apply logic checking if field should display
-      if (nextField.use_logic && nextField.logic) {
-        const isMatch = nextField.logic.every((l) => {
-          if (!input[l.field]) {
-            return false;
-          }
-          const comparedInput = Array.isArray(input[l.field]) ? input[l.field] : [input[l.field]];
-          return comparedInput.includes(l.value);
-        });
-        if (!isMatch) {
-          return getNextField(loop + 1);
-        }
-      }
-      return nextField;
-    }
-    return getNextField();
-  }, [formLayout, input, step]);
+    return formLayout[step - 1];
+  }, [formLayout, step]);
 
   const handleChange = useCallback(({ name, value }) => {
     setInput((state) => ({

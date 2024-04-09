@@ -10,7 +10,9 @@ import { useUpdated } from '@/hooks/ui';
 import CButton from '@/components/CButton.jsx';
 import CIcon from '@/components/CIcon.jsx';
 import CLoader from '@/components/CLoader.jsx';
-import { useContextState, useStep, useSubmit } from './hooks';
+import {
+  useContextState, useStep, useInput, useSubmit,
+} from './hooks';
 import FormProgress from './FormProgress.jsx';
 import StepIntro from './StepIntro.jsx';
 import StepDynamic from './StepDynamic.jsx';
@@ -26,6 +28,7 @@ export default function FormLayout() {
     'loading', 'completed', 'theme', 'formLayout', 'data',
   ]);
   const [step, setStep] = useStep();
+  const [input] = useInput();
   const doSubmit = useSubmit();
 
   const [mounted, setMounted] = useState(false);
@@ -42,17 +45,36 @@ export default function FormLayout() {
     return d;
   }, [transition]);
 
+  const getNextStep = (currStep, inc) => {
+    // apply logic checking if field should display
+    const nextStep = currStep + inc;
+    const nextField = formLayout[nextStep - 1];
+    if (nextField?.use_logic && nextField?.logic) {
+      const isMatch = nextField.logic.every((l) => {
+        if (!input[l.field]) {
+          return false;
+        }
+        const comparedInput = Array.isArray(input[l.field]) ? input[l.field] : [input[l.field]];
+        return comparedInput.includes(l.value);
+      });
+      if (!isMatch) {
+        return getNextStep(currStep, inc + inc);
+      }
+    }
+    return nextStep;
+  };
+
   const handleNext = () => {
     setTransition('fadeRight');
     setTimeout(() => {
-      setStep((state) => (state + 1));
+      setStep((state) => getNextStep(state, 1));
     }, 50);
   };
 
   const handlePrev = () => {
     setTransition('fadeLeft');
     setTimeout(() => {
-      setStep((state) => (state - 1));
+      setStep((state) => getNextStep(state, -1));
     }, 50);
   };
 
