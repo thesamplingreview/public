@@ -14,7 +14,7 @@ export default function SignupClient() {
   useEffect(() => {
     if (auth) {
       if (!auth.contactVerified) {
-        redirect('/verify-phone');
+        redirect('/verify-phone?skip=true');
       } else {
         redirect('/my');
       }

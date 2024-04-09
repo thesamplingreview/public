@@ -11,7 +11,9 @@ export default function IconPreloader() {
     fetch(`/sprite.svg?v=${ver}`)
       .then((resp) => resp.text())
       .then((resp) => {
-        $el.current.innerHTML = resp.replaceAll('id="', 'id="ic_');
+        if ($el.current) {
+          $el.current.innerHTML = resp.replaceAll('id="', 'id="ic_');
+        }
       });
   });
 

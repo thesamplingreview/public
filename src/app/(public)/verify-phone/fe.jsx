@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect, useSearchParams, useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useAuth, useValidated } from '@/hooks/auth';
@@ -9,11 +9,22 @@ import PhoneVerificationForm from '@/components/pages/auth/PhoneVerificationForm
 
 export default function PhoneVerificationClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const isValidated = useValidated();
-  const [auth] = useAuth();
+  const [auth, setAuth] = useAuth();
 
   const handleComplete = () => {
-    router.push('/my');
+    setAuth({
+      ...auth,
+      contact_verified_at: (new Date()).valueOf(),
+    });
+    const redirectPath = searchParams.get('redirect');
+    router.push(redirectPath || '/my');
+  };
+
+  const handleSkip = () => {
+    const redirectPath = searchParams.get('redirect');
+    router.push(redirectPath || '/my');
   };
 
   useEffect(() => {
@@ -36,7 +47,7 @@ export default function PhoneVerificationClient() {
         Enter and verify your phone number
       </Typography>
 
-      <PhoneVerificationForm onComplete={handleComplete} />
+      <PhoneVerificationForm onComplete={handleComplete} onSkip={handleSkip} />
     </Box>
   );
 }
