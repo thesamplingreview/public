@@ -1,6 +1,9 @@
 'use client';
 
+import { useMemo } from 'react';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import EditorContent from './comps/EditorContent.jsx';
 import FButton from './comps/FButton.jsx';
@@ -8,6 +11,13 @@ import { useContextState } from './hooks';
 
 export default function StepIntro({ mounted, onNext }) {
   const data = useContextState('data');
+
+  const isQuotaHit = useMemo(() => {
+    if (data.quota !== undefined && data.quota !== null) {
+      return data.enrolments_accepted_count >= data.quota;
+    }
+    return false;
+  }, [data]);
 
   return (
     <Box
@@ -45,8 +55,16 @@ export default function StepIntro({ mounted, onNext }) {
           fontSize="1rem"
         />
       )}
+      {isQuotaHit && (
+        <Box mt={6} mb={-3}>
+          <Alert severity="warning">
+            <AlertTitle>Oops!</AlertTitle>
+            This campaign has reached its enrollment quota.
+          </Alert>
+        </Box>
+      )}
       <Box mt={6} mb={6}>
-        <FButton text="Get Start" onClick={onNext} />
+        <FButton text="Get Start" disabled={isQuotaHit} onClick={onNext} />
       </Box>
     </Box>
   );

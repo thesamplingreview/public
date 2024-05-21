@@ -44,7 +44,7 @@ export default function StepSubmit({ onPrev, onSubmit }) {
         {/* validator */}
         {errorMessage && (
           <Alert severity="error" sx={{ mb: 3 }}>
-            <AlertTitle>Ops something is wrong</AlertTitle>
+            <AlertTitle>Invalid Submission!</AlertTitle>
             <span dangerouslySetInnerHTML={{ __html: errorMessage }} />
           </Alert>
         )}

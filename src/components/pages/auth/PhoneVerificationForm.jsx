@@ -141,6 +141,7 @@ function CodeInput({
   const doFetch = useFetch();
 
   const [loading, setLoading] = useState(false);
+  const [otpType, setOtpType] = useState('');
   const [notice, setNotice] = useState('');
   const [cooldown, setCooldown] = useState(0);
 
@@ -150,6 +151,8 @@ function CodeInput({
 
   const requestOtp = async () => {
     setLoading(true);
+    setNotice('');
+    setOtpType('');
     try {
       const { code } = await doFetch('/v1/auth/verify/contact/otp', {
         method: 'POST',
@@ -158,7 +161,26 @@ function CodeInput({
       if (code !== 200) {
         throw new Error('Unable to send OTP. Please try again later.');
       }
-      setNotice('OTP has been sent.');
+      setOtpType('sms');
+    } catch (err) {
+      setNotice(err.message);
+    }
+    setLoading(false);
+  };
+
+  const requestOtpWa = async () => {
+    setLoading(true);
+    setNotice('');
+    setOtpType('');
+    try {
+      const { code } = await doFetch('/v1/auth/verify/contact/otp-wa', {
+        method: 'POST',
+        data: { contact: contactNumber },
+      });
+      if (code !== 200) {
+        throw new Error('Unable to send OTP. Please try again later.');
+      }
+      setOtpType('wa');
     } catch (err) {
       setNotice(err.message);
     }
@@ -170,6 +192,11 @@ function CodeInput({
       setCooldown(60);
       requestOtp();
     }
+  };
+
+  const handleClickWa = () => {
+    setCooldown(60);
+    requestOtpWa();
   };
 
   const timer = useRef(null);
@@ -212,8 +239,34 @@ function CodeInput({
       </Grid>
       {notice && (
         <Grid xs={12}>
-          <Typography variant="body2" fontSize="0.75em" color="text.light">
+          <Typography variant="body2" fontSize="0.75em" color="error">
             {notice}
+          </Typography>
+        </Grid>
+      )}
+      {otpType === 'sms' && (
+        <Grid xs={12}>
+          <Box>
+            <Typography component="span" variant="body2" fontSize="0.75em" color="text.light" sx={{ mr: 1 }}>
+              Didn&apos;t receive OTP?
+            </Typography>
+            <Typography
+              component="span"
+              variant="body2"
+              fontSize="0.75em"
+              color="success.main"
+              className="clickable"
+              onClick={handleClickWa}
+            >
+              Send to WhatsApp instead.
+            </Typography>
+          </Box>
+        </Grid>
+      )}
+      {otpType === 'wa' && (
+        <Grid xs={12}>
+          <Typography component="span" variant="body2" fontSize="0.75em" color="text.light">
+            OTP sent to your WhatsApp number!
           </Typography>
         </Grid>
       )}

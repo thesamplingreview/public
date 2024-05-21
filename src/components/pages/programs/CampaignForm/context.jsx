@@ -22,6 +22,8 @@ function genData(data) {
     'background_url',
     'products',
     'form',
+    'quota',
+    'enrolments_accepted_count',
   ];
   return props.reduce((acc, key) => ({
     ...acc,
