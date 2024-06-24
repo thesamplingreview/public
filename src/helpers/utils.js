@@ -88,6 +88,24 @@ export function formatNumberGroup(number, fallback = '-') {
 }
 
 /**
+ * Format bytes to humanize string
+ *
+ * @param  {int}  bytes
+ * @return string
+ */
+export function formatBytes(bytes) {
+  if (bytes === 0) {
+    return '0 bytes';
+  }
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const fileSize = parseFloat((bytes / (k ** i)).toFixed(2));
+  return `${fileSize} ${sizes[i]}`;
+}
+
+/**
  * Get all input from <form>
  *
  * @param  {FormElement}  form

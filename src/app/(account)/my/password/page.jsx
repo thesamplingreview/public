@@ -3,7 +3,7 @@ import PageTitle from '@/components/pages/account/PageTitle.jsx';
 import SideNav from '@/components/pages/account/SideNav.jsx';
 import PasswordForm from '@/components/pages/account/PasswordForm.jsx';
 
-export default function MyAccount() {
+export default function MyPassword() {
   return (
     <Grid container spacing={{ xs: 3, md: 5 }}>
       <Grid xs={12} md={4} lg={3}>

@@ -68,7 +68,12 @@ body{
 .no-line{
   text-decoration: none;
 }
-
+.truncate{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 1px;
+}
 .clickable{
   cursor: pointer;
 }
