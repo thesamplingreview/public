@@ -260,6 +260,7 @@ const UploadItem = ({
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const doDeletion = async () => {
     if (!data.asset_id) {
       return;
@@ -287,8 +288,8 @@ const UploadItem = ({
     if (!window.confirm('Are you sure want to remove?')) {
       return;
     }
-    // server remove (tbc)
-    await doDeletion();
+    // server remove (tbc) - disabled
+    // await doDeletion();
     onRemove(data);
   };
 

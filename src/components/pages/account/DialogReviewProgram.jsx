@@ -157,7 +157,6 @@ function ContentReviewForm({ data, onClose, onComplete }) {
   };
 
   const handleUploadStateChange = (isUploading) => {
-    console.log(isUploading);
     setUploading(isUploading);
   };
 
@@ -198,7 +197,7 @@ function ContentReviewForm({ data, onClose, onComplete }) {
           value={input.uploads}
           max={1}
           extensions={['jpg', 'jpeg', 'png', 'webp', 'mp4', 'mov', '3gp']}
-          maxsize={4}
+          maxsize={12}
           onChange={handleChangeUploads}
           onStateChange={handleUploadStateChange}
         />
