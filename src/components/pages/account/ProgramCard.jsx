@@ -34,6 +34,7 @@ export default function ProgramCard({ data, refetch }) {
         flexDirection="column"
         bgcolor="#fff"
         borderRadius="1rem"
+        height="100%"
         overflow="hidden"
         sx={{
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
@@ -77,9 +78,19 @@ export default function ProgramCard({ data, refetch }) {
               Enrollment ID: {submission.id}
           </Typography>
           {review.id && (
-            <Typography variant="body2" mt={2}>
-              Review submitted at: <br />{format(new Date(review.created_at), config.formatDateTime)}
-            </Typography>
+            <Box mt={2}>
+              <Typography variant="body2">
+                Review submitted at: <br />{format(new Date(review.updated_at), config.formatDateTime)}
+              </Typography>
+              <CButton
+                variant="text"
+                size="small"
+                sx={{ p: 0, fontSize: '0.75em' }}
+                onClick={() => setIsReview(true)}
+              >
+                Edit review
+              </CButton>
+            </Box>
           )}
           {!review.id && (
             <Box mt={3}>

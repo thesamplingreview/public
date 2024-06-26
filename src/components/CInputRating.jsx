@@ -5,7 +5,6 @@ import CIcon from './CIcon.jsx';
 export default function CInputRating({
   name,
   value,
-  error,
   maxRate = 5,
   onChange,
 }) {

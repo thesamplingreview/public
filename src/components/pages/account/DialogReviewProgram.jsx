@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
@@ -13,6 +13,7 @@ import CButton from '@/components/CButton.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
 import CInput from '@/components/CInput.jsx';
 import CInputRating from '@/components/CInputRating.jsx';
+import CInputUpload from '@/components/CInputUpload.jsx';
 // pinjam
 import EditorContent from '@/components/pages/programs/CampaignForm/comps/EditorContent.jsx';
 
@@ -81,15 +82,27 @@ function ContentRedirect({ data, onClose }) {
   );
 }
 
+function generateDefaultInput(review) {
+  return {
+    rating: review?.rating || '',
+    review: review?.review || '',
+    uploads: review?.uploads?.map((d) => ({
+      id: d.id,
+      url: d.url,
+      asset_id: d.asset_id,
+      name: d.name,
+      size: d.size,
+    })) || [],
+  };
+}
+
 function ContentReviewForm({ data, onClose, onComplete }) {
   const doFetch = useFetch();
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [input, setInput] = useState({
-    rating: '',
-    review: '',
-  });
+  const [input, setInput] = useState(generateDefaultInput(data.reviews?.[0]));
+  const [uploading, setUploading] = useState(false);
 
   const doSubmit = async () => {
     setSaving(true);
@@ -121,6 +134,13 @@ function ContentReviewForm({ data, onClose, onComplete }) {
     });
   };
 
+  const handleChangeUploads = useCallback((newVal) => {
+    setInput((oldState) => ({
+      ...oldState,
+      uploads: newVal,
+    }));
+  }, []);
+
   const handleSubmit = () => {
     // validation
     let errMsg = '';
@@ -134,6 +154,11 @@ function ContentReviewForm({ data, onClose, onComplete }) {
 
     // save
     doSubmit();
+  };
+
+  const handleUploadStateChange = (isUploading) => {
+    console.log(isUploading);
+    setUploading(isUploading);
   };
 
   return (
@@ -167,6 +192,25 @@ function ContentReviewForm({ data, onClose, onComplete }) {
           mb={0.75}
           ml={1}
         >
+          Upload *
+        </Typography>
+        <CInputUpload
+          value={input.uploads}
+          max={1}
+          extensions={['jpg', 'jpeg', 'png', 'webp', 'mp4', 'mov', '3gp']}
+          maxsize={4}
+          onChange={handleChangeUploads}
+          onStateChange={handleUploadStateChange}
+        />
+      </Box>
+      <Box mt={2}>
+        <Typography
+          component="div"
+          fontSize="0.75em"
+          fontWeight="300"
+          mb={0.75}
+          ml={1}
+        >
           Review
         </Typography>
         <CInput
@@ -185,6 +229,7 @@ function ContentReviewForm({ data, onClose, onComplete }) {
         </CButton>
         <CLoadingButton
           variant="contained"
+          disabled={uploading}
           loading={saving}
           onClick={handleSubmit}
         >
