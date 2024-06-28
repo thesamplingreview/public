@@ -197,7 +197,7 @@ function ContentReviewForm({ data, onClose, onComplete }) {
           value={input.uploads}
           max={1}
           extensions={['jpg', 'jpeg', 'png', 'webp', 'mp4', 'mov', '3gp']}
-          maxsize={12}
+          maxsize={100}
           onChange={handleChangeUploads}
           onStateChange={handleUploadStateChange}
         />
