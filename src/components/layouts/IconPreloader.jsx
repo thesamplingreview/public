@@ -7,7 +7,7 @@ export default function IconPreloader() {
   const $el = useRef(null);
 
   useOnce(() => {
-    const ver = '1.1';
+    const ver = '1.2';
     fetch(`/sprite.svg?v=${ver}`)
       .then((resp) => resp.text())
       .then((resp) => {
