@@ -15,7 +15,7 @@ export default function LoginClient() {
   useEffect(() => {
     if (auth) {
       const redirectPath = searchParams.get('redirect');
-      redirect(redirectPath || '/my');
+      redirect(redirectPath || '/');
     }
   }, [auth, searchParams]);
 
@@ -48,7 +48,7 @@ export default function LoginClient() {
         <Typography
           variant="body2"
           component={Link}
-          href="/signup"
+          href={`/signup?${searchParams.toString()}`}
           ml={1}
           className="link-main"
         >

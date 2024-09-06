@@ -5,9 +5,14 @@ import Image from 'next/image';
 import Box from '@mui/material/Box';
 import config from '@/config/app';
 import { useUpdated } from '@/hooks/ui';
+import { useGoogleAuth } from '@/hooks/auth';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
 
-export default function GoogleAuthBtn({ text, disabled, onAuth }) {
+export default function GoogleAuthBtn({
+  text, disabled, onAuth, onError,
+}) {
+  const doGoogleAuth = useGoogleAuth();
+
   const [token, setToken] = useState('');
   const [opening, setOpening] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,6 +28,7 @@ export default function GoogleAuthBtn({ text, disabled, onAuth }) {
 
     setOpening(true);
     setToken('');
+    setError(null);
     // internal check for closing
     closeCheckTimer.current = setInterval(() => {
       if (popup.closed) {
@@ -46,13 +52,15 @@ export default function GoogleAuthBtn({ text, disabled, onAuth }) {
       if (!result?.sub) {
         throw new Error('Unable to connect with Google');
       }
+
+      // do server action
+      const auth = await doGoogleAuth({
+        email: result.email,
+        token: accessToken,
+      });
+
       if (onAuth) {
-        onAuth({
-          id: result.sub,
-          accessToken: token,
-          email: result.email,
-          name: result.name || '',
-        });
+        onAuth(auth);
       }
     } catch (err) {
       setError(err);
@@ -83,6 +91,12 @@ export default function GoogleAuthBtn({ text, disabled, onAuth }) {
       fetchMe(token);
     }
   }, [token]);
+
+  useUpdated(() => {
+    if (error) {
+      onError(error.message);
+    }
+  }, [error]);
 
   return (
     <>

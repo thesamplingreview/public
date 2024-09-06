@@ -23,7 +23,6 @@ function genDefaultInput() {
 export default function SignupForm({ onComplete, ...props }) {
   const isValidated = useValidated();
   const doSignup = useSignup();
-  const doGoogleSignup = useSignup('google');
 
   const [view, setView] = useState('index');
   const [input, setInput] = useState(genDefaultInput());
@@ -56,7 +55,9 @@ export default function SignupForm({ onComplete, ...props }) {
     try {
       const result = await doSignup(input);
       // callback
-      onComplete(result);
+      if (onComplete) {
+        onComplete(result);
+      }
     } catch (err) {
       setAlert({
         type: 'error',
@@ -66,27 +67,42 @@ export default function SignupForm({ onComplete, ...props }) {
     setLoading(false);
   };
 
-  const handleUseGoogle = async (profile) => {
-    const formData = {
-      email: profile.email,
-      name: profile.name || '',
-      token: profile.accessToken,
-      google_user_id: profile.id,
-    };
+  const handleGoogleLogin = async (auth) => {
     setAlert(null);
-    setLoading(true);
-    try {
-      const result = await doGoogleSignup(formData);
-      // callback
-      onComplete(result);
-    } catch (err) {
-      setAlert({
-        type: 'error',
-        message: err.message,
-      });
+    // callback
+    if (onComplete) {
+      onComplete(auth);
     }
-    setLoading(false);
   };
+
+  const handleGoogleError = (errMessage) => {
+    setAlert({
+      type: 'error',
+      message: errMessage,
+    });
+  };
+
+  // const handleUseGoogle = async (profile) => {
+  //   const formData = {
+  //     email: profile.email,
+  //     name: profile.name || '',
+  //     token: profile.accessToken,
+  //     google_user_id: profile.id,
+  //   };
+  //   setAlert(null);
+  //   setLoading(true);
+  //   try {
+  //     const result = await doGoogleSignup(formData);
+  //     // callback
+  //     onComplete(result);
+  //   } catch (err) {
+  //     setAlert({
+  //       type: 'error',
+  //       message: err.message,
+  //     });
+  //   }
+  //   setLoading(false);
+  // };
 
   return (
     <Box
@@ -106,9 +122,10 @@ export default function SignupForm({ onComplete, ...props }) {
         <>
           <Box>
             <GoogleAuthBtn
-              text="Sign up with Google"
+              text="Continue with Google"
               disabled={loading || !isValidated}
-              onAuth={handleUseGoogle}
+              onAuth={handleGoogleLogin}
+              onError={handleGoogleError}
             />
           </Box>
 

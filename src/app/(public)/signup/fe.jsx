@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { redirect } from 'next/navigation';
+import { useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/auth';
 import SignupForm from '@/components/pages/auth/SignupForm.jsx';
 
 export default function SignupClient() {
+  const searchParams = useSearchParams();
   const [auth] = useAuth();
 
   useEffect(() => {
@@ -16,10 +17,11 @@ export default function SignupClient() {
       if (!auth.contactVerified) {
         redirect('/verify-phone?skip=true');
       } else {
-        redirect('/my');
+        const redirectPath = searchParams.get('redirect');
+        redirect(redirectPath || '/');
       }
     }
-  }, [auth]);
+  }, [auth, searchParams]);
 
   return (
     <Box maxWidth="320px" textAlign="center" mx="auto">
@@ -39,7 +41,7 @@ export default function SignupClient() {
         <Typography
           variant="body2"
           component={Link}
-          href="/login"
+          href={`/login?${searchParams.toString()}`}
           ml={1}
           className="link-main"
         >
