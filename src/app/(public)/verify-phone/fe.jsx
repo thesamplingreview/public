@@ -19,12 +19,12 @@ export default function PhoneVerificationClient() {
       contact_verified_at: (new Date()).valueOf(),
     });
     const redirectPath = searchParams.get('redirect');
-    router.push(redirectPath || '/my');
+    router.push(redirectPath || '/');
   };
 
   const handleSkip = () => {
     const redirectPath = searchParams.get('redirect');
-    router.push(redirectPath || '/my');
+    router.push(redirectPath || '/');
   };
 
   useEffect(() => {
