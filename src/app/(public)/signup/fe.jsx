@@ -14,8 +14,16 @@ export default function SignupClient() {
 
   useEffect(() => {
     if (auth) {
-      if (!auth.contactVerified) {
-        redirect('/verify-phone?skip=true');
+      /**
+       * Change request #20241224
+       * - disable OTP verification flow
+       * - but require phone number
+       */
+      if (!auth.contact) {
+        redirect('/enter-phone?skip=true');
+      // }
+      // if (!auth.contactVerified) {
+        // redirect('/verify-phone?skip=true');
       } else {
         const redirectPath = searchParams.get('redirect');
         redirect(redirectPath || '/');

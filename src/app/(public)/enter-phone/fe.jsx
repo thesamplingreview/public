@@ -5,18 +5,24 @@ import { redirect, useSearchParams, useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useAuth, useValidated } from '@/hooks/auth';
-import PhoneVerificationForm from '@/components/pages/auth/PhoneVerificationForm.jsx';
+import PhoneForm from '@/components/pages/auth/PhoneForm.jsx';
 
-export default function PhoneVerificationClient() {
+/**
+ * Change request #20241224
+ * - disable OTP verification flow
+ * - but require phone number
+ */
+export default function PhoneFormClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isValidated = useValidated();
   const [auth, setAuth] = useAuth();
 
-  const handleComplete = () => {
+  const handleComplete = (newInput) => {
     setAuth({
       ...auth,
-      contact_verified_at: (new Date()).valueOf(),
+      ...newInput,
+      // contact_verified_at: (new Date()).valueOf(),
     });
     const redirectPath = searchParams.get('redirect');
     router.push(redirectPath || '/');
@@ -42,15 +48,15 @@ export default function PhoneVerificationClient() {
     <>
       <Box textAlign="center" mx="auto">
         <Typography variant="h1" mb={2}>
-          Phone Verification
+          Enter Phone Number
         </Typography>
         <Typography variant="body1" color="text.light" mb={4}>
-          Enter and verify your phone number
+          Enter your phone number to proceed
         </Typography>
       </Box>
 
       <Box maxWidth="320px" textAlign="center" mx="auto">
-        <PhoneVerificationForm onComplete={handleComplete} onSkip={handleSkip} />
+        <PhoneForm onComplete={handleComplete} onSkip={handleSkip} />
       </Box>
     </>
   );
