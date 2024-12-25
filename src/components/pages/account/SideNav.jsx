@@ -51,7 +51,7 @@ export default function SideNav({ current }) {
   return (
     <>
       {/* alert */}
-      {!auth.contactVerified && (
+      {/* {!auth.contactVerified && (
         <Alert severity="warning" sx={{ mb: 2 }}>
           Phone number is unverified!<br />
           <Box
@@ -63,6 +63,22 @@ export default function SideNav({ current }) {
             sx={{ textDecoration: 'none' }}
           >
             Verify now
+          </Box>
+        </Alert>
+      )} */}
+
+      {!auth.contact && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Phone number is empty!<br />
+          <Box
+            component={Link}
+            href="/enter-phone?skip=true"
+            fontSize="0.875em"
+            fontWeight="600"
+            color="warning.dark"
+            sx={{ textDecoration: 'none' }}
+          >
+            Enter now
           </Box>
         </Alert>
       )}

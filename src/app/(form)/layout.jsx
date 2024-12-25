@@ -13,10 +13,17 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     if (validated) {
+      /**
+       * Change request #20241224
+       * - disable OTP verification flow
+       * - but require phone number
+       */
       if (!auth) {
         redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
-      } else if (!auth.contactVerified) {
-        redirect(`/verify-phone?redirect=${encodeURIComponent(pathname)}`);
+      // } else if (!auth.contactVerified) {
+      //   redirect(`/verify-phone?redirect=${encodeURIComponent(pathname)}`);
+      } else if (!auth.contact) {
+        redirect(`/enter-phone?redirect=${encodeURIComponent(pathname)}`);
       }
     }
   }, [auth, validated, pathname]);
