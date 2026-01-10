@@ -26,24 +26,40 @@ export default function FieldAddress({
   const [saving, setSaving] = useState(false);
   const [prefilled, setPrefilled] = useState(false);
 
+  // Normalize value to always be an object
+  const normalizedValue = useMemo(() => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+      return {};
+    }
+    return value;
+  }, [value]);
+
   // Prefill from user delivery_address if available and not already filled
   useEffect(() => {
-    if (user?.deliveryAddress && !prefilled && (!value || Object.keys(value).length === 0 || Object.values(value).every(v => !v))) {
+    // Check if value is empty (either undefined, empty string, empty object, or object with all empty values)
+    const isEmpty = !normalizedValue || 
+                    Object.keys(normalizedValue).length === 0 || 
+                    Object.values(normalizedValue).every(v => !v || (typeof v === 'string' && v.trim() === ''));
+    
+    if (user?.deliveryAddress && !prefilled && isEmpty) {
       const addressData = user.deliveryAddress;
-      onChange({
-        name,
-        value: {
-          name: addressData.name || '',
-          email: addressData.email || '',
-          contact: addressData.contact || '',
-          address: addressData.address || '',
-          postal: addressData.postal || '',
-          state: addressData.state || '',
-        },
-      });
-      setPrefilled(true);
+      // Only prefill if deliveryAddress is actually an object with data
+      if (addressData && typeof addressData === 'object' && !Array.isArray(addressData)) {
+        onChange({
+          name,
+          value: {
+            name: addressData.name || '',
+            email: addressData.email || '',
+            contact: addressData.contact || '',
+            address: addressData.address || '',
+            postal: addressData.postal || '',
+            state: addressData.state || '',
+          },
+        });
+        setPrefilled(true);
+      }
     }
-  }, [user, prefilled, value, name, onChange]);
+  }, [user, prefilled, normalizedValue, name, onChange]);
 
   const isNextable = useMemo(() => {
     if (field.mandatory) {
@@ -60,16 +76,16 @@ export default function FieldAddress({
       if (field.config?.fields?.includes('address')) {
         fields.push('address', 'postal', 'state');
       }
-      return fields.every((key) => value?.[key]?.trim());
+      return fields.every((key) => normalizedValue?.[key]?.trim());
     }
     return true;
-  }, [field, value]);
+  }, [field, normalizedValue]);
 
   const handleChange = (e) => {
     onChange({
       name,
       value: {
-        ...value,
+        ...normalizedValue,
         [e.target.name]: e.target.value,
       },
     });
@@ -77,13 +93,13 @@ export default function FieldAddress({
 
   const handleNext = async () => {
     // Save delivery_address to user profile if user is logged in
-    if (user && value) {
+    if (user && normalizedValue) {
       setSaving(true);
       try {
         const result = await doFetch('/v1/auth/my', {
           method: 'PUT',
           data: {
-            delivery_address: value,
+            delivery_address: normalizedValue,
           },
         });
         // Update user context with new delivery_address
@@ -117,7 +133,7 @@ export default function FieldAddress({
               <CInput
                 placeholder="Recipient name"
                 name="name"
-                value={value?.name || ''}
+                value={normalizedValue?.name || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -127,7 +143,7 @@ export default function FieldAddress({
               <CInputPhone
                 placeholder="Phone number"
                 name="contact"
-                value={value?.contact}
+                value={normalizedValue?.contact || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -138,7 +154,7 @@ export default function FieldAddress({
                 type="email"
                 placeholder="Email address"
                 name="email"
-                value={value?.email || ''}
+                value={normalizedValue?.email || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -151,7 +167,7 @@ export default function FieldAddress({
                   minRows={3}
                   placeholder="Mailling address"
                   name="address"
-                  value={value?.address || ''}
+                  value={normalizedValue?.address || ''}
                   onChange={handleChange}
                 />
               </Grid>
@@ -159,7 +175,7 @@ export default function FieldAddress({
                 <CInput
                   placeholder="Postal code"
                   name="postal"
-                  value={value?.postal || ''}
+                  value={normalizedValue?.postal || ''}
                   onChange={handleChange}
                 />
               </Grid>
@@ -168,7 +184,7 @@ export default function FieldAddress({
                   options={states}
                   placeholder="Select state"
                   name="state"
-                  value={value?.state || ''}
+                  value={normalizedValue?.state || ''}
                   onChange={handleChange}
                 />
               </Grid>

@@ -70,7 +70,9 @@ export default function StepDynamic({ step, onPrev, onNext }) {
       {/* body */}
       <FieldItem
         field={field}
-        value={input[field.id] || ''}
+        value={input[field.id] !== undefined 
+          ? input[field.id] 
+          : (field.type === 'address' ? {} : '')}
         onChange={handleChange}
         onPrev={handlePrev}
         onNext={onNext}
