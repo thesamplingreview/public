@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import { states } from '@/config/options';
@@ -9,6 +9,8 @@ import CSelect from '@/components/CSelect.jsx';
 import CInputPhone from '@/components/CInputPhone.jsx';
 import HintText from '../comps/HintText.jsx';
 import FieldAction from '../comps/FieldAction.jsx';
+import { useAuth } from '@/hooks/auth';
+import { useFetch } from '@/hooks/fetcher';
 
 export default function FieldAddress({
   field,
@@ -19,6 +21,29 @@ export default function FieldAddress({
   onNext,
 }) {
   const $el = useRef(null);
+  const [user, setUser] = useAuth();
+  const doFetch = useFetch();
+  const [saving, setSaving] = useState(false);
+  const [prefilled, setPrefilled] = useState(false);
+
+  // Prefill from user delivery_address if available and not already filled
+  useEffect(() => {
+    if (user?.deliveryAddress && !prefilled && (!value || Object.keys(value).length === 0 || Object.values(value).every(v => !v))) {
+      const addressData = user.deliveryAddress;
+      onChange({
+        name,
+        value: {
+          name: addressData.name || '',
+          email: addressData.email || '',
+          contact: addressData.contact || '',
+          address: addressData.address || '',
+          postal: addressData.postal || '',
+          state: addressData.state || '',
+        },
+      });
+      setPrefilled(true);
+    }
+  }, [user, prefilled, value, name, onChange]);
 
   const isNextable = useMemo(() => {
     if (field.mandatory) {
@@ -48,6 +73,32 @@ export default function FieldAddress({
         [e.target.name]: e.target.value,
       },
     });
+  };
+
+  const handleNext = async () => {
+    // Save delivery_address to user profile if user is logged in
+    if (user && value) {
+      setSaving(true);
+      try {
+        const result = await doFetch('/v1/auth/my', {
+          method: 'PUT',
+          data: {
+            delivery_address: value,
+          },
+        });
+        // Update user context with new delivery_address
+        if (result?.data) {
+          setUser(result.data);
+        }
+      } catch (err) {
+        // Silently fail - don't block form submission if save fails
+        // eslint-disable-next-line no-console
+        console.error('Failed to save delivery address:', err);
+      } finally {
+        setSaving(false);
+      }
+    }
+    onNext();
   };
 
   useEffect(() => {
@@ -134,9 +185,9 @@ export default function FieldAddress({
         )}
       </Box>
       <FieldAction
-        disabled={!isNextable}
+        disabled={!isNextable || saving}
         onPrev={onPrev}
-        onNext={onNext}
+        onNext={handleNext}
       />
     </>
   );

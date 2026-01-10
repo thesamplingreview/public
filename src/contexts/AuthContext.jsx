@@ -27,6 +27,7 @@ const cachedUserData = (data) => {
     contact: data.contact,
     emailVerified: !!data.email_verified_at,
     contactVerified: !!data.contact_verified_at,
+    deliveryAddress: data.delivery_address || null,
   };
 };
 
