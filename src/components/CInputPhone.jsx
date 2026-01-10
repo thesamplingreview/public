@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useUpdated } from '@/hooks/ui';
 import { phonePrefixes } from '@/config/options';
@@ -13,6 +13,14 @@ export default function CInputPhone({
   ...props
 }) {
   const [internalVal, setInternalVal] = useState(value || '');
+
+  // Sync internal state with value prop changes (for prefilling)
+  useEffect(() => {
+    if (value !== undefined && value !== internalVal) {
+      setInternalVal(value || '');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   const prefixes = useMemo(() => {
     return phonePrefixes.map((d) => ({
