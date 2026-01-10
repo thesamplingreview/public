@@ -1,6 +1,24 @@
+import { useMemo } from 'react';
 import Box from '@mui/material/Box';
 
 export default function EditorContent({ content, ...props }) {
+  const processedContent = useMemo(() => {
+    if (!content) return content;
+    
+    // Process HTML to add target="_blank" to links containing "Demo Video"
+    return content.replace(
+      /<a\s+([^>]*?)>([^<]*?Demo Video[^<]*?)<\/a>/gi,
+      (match, attrs, linkText) => {
+        // Check if target="_blank" already exists
+        if (attrs.includes('target=')) {
+          return match.replace(/target="[^"]*"/gi, 'target="_blank"');
+        }
+        // Add target="_blank" and rel="noopener noreferrer"
+        return `<a ${attrs} target="_blank" rel="noopener noreferrer">${linkText}</a>`;
+      }
+    );
+  }, [content]);
+
   return (
     <Box
       width="100%"
@@ -23,7 +41,7 @@ export default function EditorContent({ content, ...props }) {
         },
       }}
     >
-      <div className="content" dangerouslySetInnerHTML={{ __html: content }} />
+      <div className="content" dangerouslySetInnerHTML={{ __html: processedContent }} />
     </Box>
   );
 }
