@@ -1,11 +1,16 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import {
+  useRef, useState, useMemo, useCallback, useEffect,
+} from 'react';
 import { useSearchParams } from 'next/navigation';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
 import { useFetch } from '@/hooks/fetcher';
 import { useValidated } from '@/hooks/auth';
+import CInput from '@/components/CInput.jsx';
 import CInputPhone from '@/components/CInputPhone.jsx';
 import CButton from '@/components/CButton.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
@@ -13,13 +18,12 @@ import CLoadingButton from '@/components/CLoadingButton.jsx';
 function genDefaultInput() {
   return {
     contact: '',
+    code: '',
   };
 }
 
 /**
- * Change request #20241224
- * - disable OTP verification flow
- * - but require phone number
+ * Phone form with OTP verification using Evolution API
  */
 export default function PhoneForm({ onComplete, onSkip, ...props }) {
   const searchParams = useSearchParams();
@@ -93,16 +97,24 @@ export default function PhoneForm({ onComplete, onSkip, ...props }) {
           onChange={handleChange}
         />
       </Box>
+      <Box mt={2}>
+        <CodeInput
+          name="code"
+          value={input.code}
+          contactNumber={input.contact}
+          onChange={handleChange}
+        />
+      </Box>
       <Box mt={3}>
         <CLoadingButton
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          disabled={!isValidated || !input.contact}
+          disabled={!isValidated || !input.contact || !input.code}
           loading={loading}
         >
-          Update
+          Verify & Update
         </CLoadingButton>
       </Box>
 
@@ -124,5 +136,101 @@ export default function PhoneForm({ onComplete, onSkip, ...props }) {
         </Box>
       )}
     </Box>
+  );
+}
+
+function CodeInput({
+  name, value, contactNumber, onChange,
+}) {
+  const doFetch = useFetch();
+
+  const [loading, setLoading] = useState(false);
+  const [otpType, setOtpType] = useState('');
+  const [notice, setNotice] = useState('');
+  const [cooldown, setCooldown] = useState(0);
+
+  const clickable = useMemo(() => {
+    return !loading && cooldown <= 0 && contactNumber.length > 6;
+  }, [loading, cooldown, contactNumber]);
+
+  const requestOtpWa = async () => {
+    setLoading(true);
+    setNotice('');
+    setOtpType('');
+    try {
+      const { code } = await doFetch('/v1/auth/verify/contact/otp-wa', {
+        method: 'POST',
+        data: { contact: contactNumber },
+      });
+      if (code !== 200) {
+        throw new Error('Unable to send OTP. Please try again later.');
+      }
+      setOtpType('wa');
+      setCooldown(60);
+    } catch (err) {
+      setNotice(err.message);
+    }
+    setLoading(false);
+  };
+
+  const handleClickWa = () => {
+    if (cooldown <= 0) {
+      requestOtpWa();
+    }
+  };
+
+  const timer = useRef(null);
+  useEffect(() => {
+    if (cooldown > 0) {
+      timer.current = setTimeout(() => {
+        setCooldown((oldState) => (oldState - 1));
+      }, 1000);
+    }
+
+    return () => clearTimeout(timer.current);
+  }, [cooldown]);
+
+  return (
+    <Grid container spacing={1}>
+      <Grid xs={7}>
+        <CInput
+          name={name}
+          placeholder="Enter OTP code"
+          required
+          value={value}
+          onChange={onChange}
+        />
+      </Grid>
+      <Grid xs={5}>
+        <CButton
+          variant="outlined"
+          color="primary"
+          fullWidth
+          sx={{
+            fontSize: '0.875em',
+            height: '100%',
+            px: 1,
+          }}
+          disabled={!clickable}
+          onClick={handleClickWa}
+        >
+          {cooldown > 0 ? `Resend in ${cooldown}s` : 'Get OTP'}
+        </CButton>
+      </Grid>
+      {notice && (
+        <Grid xs={12}>
+          <Typography variant="body2" fontSize="0.75em" color="error">
+            {notice}
+          </Typography>
+        </Grid>
+      )}
+      {otpType === 'wa' && (
+        <Grid xs={12}>
+          <Typography component="span" variant="body2" fontSize="0.75em" color="text.light">
+            OTP sent to your WhatsApp number via Evolution API!
+          </Typography>
+        </Grid>
+      )}
+    </Grid>
   );
 }

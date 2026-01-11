@@ -8,9 +8,7 @@ import { useAuth, useValidated } from '@/hooks/auth';
 import PhoneForm from '@/components/pages/auth/PhoneForm.jsx';
 
 /**
- * Change request #20241224
- * - disable OTP verification flow
- * - but require phone number
+ * Phone number entry with OTP verification via Evolution API
  */
 export default function PhoneFormClient() {
   const router = useRouter();
@@ -22,7 +20,7 @@ export default function PhoneFormClient() {
     setAuth({
       ...auth,
       ...newInput,
-      // contact_verified_at: (new Date()).valueOf(),
+      contact_verified_at: (new Date()).valueOf(),
     });
     const redirectPath = searchParams.get('redirect');
     router.push(redirectPath || '/');
@@ -48,10 +46,10 @@ export default function PhoneFormClient() {
     <>
       <Box textAlign="center" mx="auto">
         <Typography variant="h1" mb={2}>
-          Enter Phone Number
+          Verify Phone Number
         </Typography>
         <Typography variant="body1" color="text.light" mb={4}>
-          Enter your phone number to proceed
+          Enter your phone number and verify with OTP code
         </Typography>
       </Box>
 
