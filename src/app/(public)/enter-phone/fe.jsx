@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { redirect, useSearchParams, useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useAuth, useValidated } from '@/hooks/auth';
+import ToastContext from '@/contexts/ToastContext.jsx';
 import PhoneForm from '@/components/pages/auth/PhoneForm.jsx';
 
 /**
@@ -15,6 +16,7 @@ export default function PhoneFormClient() {
   const searchParams = useSearchParams();
   const isValidated = useValidated();
   const [auth, setAuth] = useAuth();
+  const { showToast } = useContext(ToastContext);
 
   const handleComplete = (newInput) => {
     setAuth({
@@ -22,8 +24,15 @@ export default function PhoneFormClient() {
       ...newInput,
       contact_verified_at: (new Date()).valueOf(),
     });
-    const redirectPath = searchParams.get('redirect');
-    router.push(redirectPath || '/');
+    const redirectPath = searchParams.get('redirect') || '/';
+    
+    // Show toast immediately, then navigate
+    showToast('Phone number verified successfully!', 'success');
+    
+    // Navigate after a short delay to allow toast to appear
+    setTimeout(() => {
+      router.push(redirectPath);
+    }, 100);
   };
 
   const handleSkip = () => {

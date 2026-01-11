@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
-import { usePathname, redirect } from 'next/navigation';
+import { useEffect, useContext } from 'react';
+import { usePathname, redirect, useSearchParams, useRouter } from 'next/navigation';
 import { useValidated, useAuth } from '@/hooks/auth';
+import ToastContext from '@/contexts/ToastContext.jsx';
 import CLoader from '@/components/CLoader.jsx';
 import IconPreloader from '@/components/layouts/IconPreloader.jsx';
 
@@ -10,6 +11,25 @@ export default function Layout({ children }) {
   const [auth] = useAuth();
   const validated = useValidated();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { showToast } = useContext(ToastContext);
+
+  // Check for stored toast message in sessionStorage
+  useEffect(() => {
+    const storedToast = sessionStorage.getItem('toast_message');
+    if (storedToast) {
+      try {
+        const { message, severity } = JSON.parse(storedToast);
+        setTimeout(() => {
+          showToast(message, severity);
+          sessionStorage.removeItem('toast_message');
+        }, 300);
+      } catch (err) {
+        sessionStorage.removeItem('toast_message');
+      }
+    }
+  }, [showToast]);
 
   useEffect(() => {
     if (validated) {

@@ -54,7 +54,7 @@ export default function PhoneForm({ onComplete, onSkip, ...props }) {
       if (code !== 200) {
         throw new Error('Failed to update contact.');
       }
-      // callback
+      // Success - callback immediately (toast will show after navigation)
       onComplete(input);
     } catch (err) {
       let errMsg;
@@ -227,10 +227,11 @@ function CodeInput({
       {otpType === 'wa' && (
         <Grid xs={12}>
           <Typography component="span" variant="body2" fontSize="0.75em" color="text.light">
-            OTP sent to your WhatsApp number via Evolution API!
+            OTP sent to your WhatsApp Number
           </Typography>
         </Grid>
       )}
     </Grid>
   );
 }
+

@@ -2,6 +2,7 @@ import { poppins } from '@/libs/font';
 import ThemeRegistry from '@/libs/muiTheme.jsx';
 import { useServerAuth } from '@/hooks/auth-server';
 import { AuthProvider } from '@/contexts/AuthContext.jsx';
+import { ToastProvider } from '@/contexts/ToastContext.jsx';
 import './globals.css';
 
 export const metadata = {
@@ -28,7 +29,9 @@ export default async function RootLayout({ children }) {
       <body>
         <ThemeRegistry>
           <AuthProvider initData={initAuth}>
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </AuthProvider>
         </ThemeRegistry>
       </body>

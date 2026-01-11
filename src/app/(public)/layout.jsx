@@ -1,11 +1,15 @@
+'use client';
+
 import Box from '@mui/material/Box';
 import Header from '@/components/layouts/Header.jsx';
 import Footer from '@/components/layouts/Footer.jsx';
 import IconPreloader from '@/components/layouts/IconPreloader.jsx';
+import ToastHandler from '@/components/ToastHandler.jsx';
 
 export default function Layout({ children }) {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh">
+      <ToastHandler />
       <Header />
       <Box component="main" flexGrow="1">
         {children}
