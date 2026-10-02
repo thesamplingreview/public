@@ -40,7 +40,7 @@ export default function Footer() {
           </Grid>
           <Grid xs={12} md="auto">
             <Box component="span" fontSize="0.875em">
-              © 2024 SamplingReview
+              © 2026 SamplingReview
             </Box>
           </Grid>
         </Grid>
