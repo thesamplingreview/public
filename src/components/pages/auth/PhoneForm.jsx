@@ -14,6 +14,7 @@ import CInput from '@/components/CInput.jsx';
 import CInputPhone from '@/components/CInputPhone.jsx';
 import CButton from '@/components/CButton.jsx';
 import CLoadingButton from '@/components/CLoadingButton.jsx';
+import appConfig from '@/config/app';
 
 function genDefaultInput() {
   return {
@@ -97,24 +98,26 @@ export default function PhoneForm({ onComplete, onSkip, ...props }) {
           onChange={handleChange}
         />
       </Box>
-      <Box mt={2}>
-        <CodeInput
-          name="code"
-          value={input.code}
-          contactNumber={input.contact}
-          onChange={handleChange}
-        />
-      </Box>
+      {appConfig.phoneOtpRequired && (
+        <Box mt={2}>
+          <CodeInput
+            name="code"
+            value={input.code}
+            contactNumber={input.contact}
+            onChange={handleChange}
+          />
+        </Box>
+      )}
       <Box mt={3}>
         <CLoadingButton
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          disabled={!isValidated || !input.contact || !input.code}
+          disabled={!isValidated || !input.contact || (appConfig.phoneOtpRequired && !input.code)}
           loading={loading}
         >
-          Verify & Update
+          {appConfig.phoneOtpRequired ? 'Verify & Update' : 'Save'}
         </CLoadingButton>
       </Box>
 

@@ -6,6 +6,7 @@ const nextConfig = {
     NEXT_PUBLIC_DEBUG: process.env.APP_DEBUG,
     NEXT_PUBLIC_API: process.env.NEXT_PUBLIC_API,
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_PHONE_OTP_REQUIRED: process.env.PHONE_OTP_REQUIRED,
   },
   eslint: {
     ignoreDuringBuilds: true,

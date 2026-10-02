@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { useAuth, useValidated } from '@/hooks/auth';
 import ToastContext from '@/contexts/ToastContext.jsx';
 import PhoneForm from '@/components/pages/auth/PhoneForm.jsx';
+import appConfig from '@/config/app';
 
 /**
  * Phone number entry with OTP verification via Evolution API
@@ -22,12 +23,12 @@ export default function PhoneFormClient() {
     setAuth({
       ...auth,
       ...newInput,
-      contact_verified_at: (new Date()).valueOf(),
+      ...(appConfig.phoneOtpRequired && { contact_verified_at: (new Date()).valueOf() }),
     });
     const redirectPath = searchParams.get('redirect') || '/';
     
     // Show toast immediately, then navigate
-    showToast('Phone number verified successfully!', 'success');
+    showToast(appConfig.phoneOtpRequired ? 'Phone number verified successfully!' : 'Phone number saved.', 'success');
     
     // Navigate after a short delay to allow toast to appear
     setTimeout(() => {
@@ -55,10 +56,10 @@ export default function PhoneFormClient() {
     <>
       <Box textAlign="center" mx="auto">
         <Typography variant="h1" mb={2}>
-          Verify Phone Number
+          {appConfig.phoneOtpRequired ? 'Verify Phone Number' : 'Phone Number'}
         </Typography>
         <Typography variant="body1" color="text.light" mb={4}>
-          Enter your phone number and verify with OTP code
+          {appConfig.phoneOtpRequired ? 'Enter your phone number and verify with OTP code' : 'Enter your phone number'}
         </Typography>
       </Box>
 
