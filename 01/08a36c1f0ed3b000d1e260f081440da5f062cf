@@ -1,0 +1,14 @@
+src/components/layouts/Footer.jsx
+  h_76297012ef00f9 43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "0108a36c1f0ed3b000d1e260f081440da5f062cf",
+  "prompts": {},
+  "humans": {
+    "h_76297012ef00f9": {
+      "author": "evanbeh <ewen2@lenovo.com>"
+    }
+  }
+}
